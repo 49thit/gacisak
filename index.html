@@ -42,438 +42,7 @@
   }
   </script>
 
-  <style>
-    /* Design tokens & palette */
-    :root{
-      --navy:#0B203A;
-      --glacier:#5FB3E3;
-      --aurora:#2BB673;
-      --snow:#F6F9FC;
-      --gold:#BE9B28;
-      --slate:#6B7A90;
-      --container:1200px;
-      --radius:0px;
-      --shadow:0 8px 28px rgba(11,32,58,.08);
-      --muted:rgba(107,122,144,.9);
-      --midnight:#010B2B;
-      --midnight-gloss:#04133C;
-      --midnight-ink:#00040F;
-      --gold-subdued:#C39A34;
-      --gold-hot:#FFE28A;
-      --crimson:#D22630;
-      --teal:#00A3AD;
-      --amber:#C69214;
-    }
-
-    /* Minimal reset */
-    *,*::before,*::after{box-sizing:border-box}
-    html{font-family:-apple-system, "Segoe UI", Roboto, Inter, Arial, sans-serif;font-size:16px;line-height:1.45;color:var(--navy);-webkit-font-smoothing:antialiased}
-    body{margin:0;background:var(--midnight-ink);color:var(--gold-subdued)}
-    h1,h2,h3,h4,h5{color:var(--gold-hot);font-weight:700}
-    img{display:block;max-width:100%;height:auto}
-    a{color:var(--gold-subdued);text-decoration:none;transition:color .2s ease}
-    a:hover{color:var(--gold-hot)}
-    button{font:inherit}
-    :focus{outline:none}
-    :focus-visible{outline:3px solid var(--glacier);outline-offset:3px;border-radius:0}
-
-    .container{max-width:var(--container);margin:0 auto;padding:0 20px}
-    .stack{display:grid;gap:20px}
-    .row{display:flex;gap:16px;align-items:center}
-    .visually-hidden{position:absolute!important;height:1px;width:1px;overflow:hidden;clip:rect(1px,1px,1px,1px);white-space:nowrap;border:0;padding:0;margin:-1px}
-
-    /* Top status bar */
-    .status-bar{background:linear-gradient(90deg,var(--crimson),var(--teal));color:#fbf4ec;font-size:.9rem;box-shadow:0 6px 16px rgba(0,0,0,.6)}
-    .status-row{display:flex;justify-content:space-between;align-items:center;padding:8px 0}
-    .status-row a{color:#fdfdfd}
-    .status-row .msg{max-width:75ch}
-
-    /* Header: midnight glossy corridor */
-    header.site-header{
-      position:sticky;
-      top:0;
-      z-index:80;
-      background:linear-gradient(135deg,#010814 0%,#041432 50%,#071d48 100%);
-      border-bottom:1px solid rgba(0,0,0,.75);
-      box-shadow:0 14px 32px rgba(0,0,0,.55),inset 0 1px 0 rgba(255,255,255,.08);
-    }
-    .header-inner{
-      display:grid;
-      grid-template-columns:auto 1fr auto;
-      align-items:stretch;
-      gap:16px;
-      padding:0;
-      min-height:78px;
-    }
-    .brand{
-      display:flex;
-      align-items:center;
-      padding:12px 0;
-      color:var(--gold-hot);
-    }
-    .brand svg{display:block}
-    .brand text{fill:var(--gold-hot)}
-
-    .midnight-nav{
-      display:flex;
-      align-items:stretch;
-      justify-content:center;
-    }
-    .nav-tiles{
-      list-style:none;
-      margin:0;
-      padding:0;
-      display:flex;
-      gap:0;
-      align-items:stretch;
-      position:relative;
-      border:1px solid rgba(0,0,0,.85);
-      border-top:none;
-      border-bottom:none;
-      box-shadow:inset 0 1px 0 rgba(255,255,255,.05);
-    }
-    .nav-item{
-      position:static;
-      flex:1 1 0;
-      min-width:120px;
-    }
-    .nav-tile{
-      width:100%;
-      height:100%;
-      padding:18px 22px;
-      background:linear-gradient(180deg,#050f2f 0%,#010616 85%,#00030b 100%);
-      border:none;
-      border-left:1px solid rgba(0,0,0,.9);
-      border-right:1px solid rgba(15,21,45,.9);
-      color:var(--gold-subdued);
-      text-transform:uppercase;
-      letter-spacing:.08em;
-      font-weight:700;
-      font-size:.85rem;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      cursor:default;
-      transition:color .18s ease,box-shadow .18s ease,background .18s ease;
-      box-shadow:inset 0 -18px 28px rgba(0,0,0,.45);
-    }
-    .nav-item:first-child .nav-tile{border-left:none}
-    .nav-item:last-child .nav-tile{border-right:none}
-    .nav-tile:focus-visible{outline:3px solid var(--glacier);outline-offset:-3px}
-    .nav-tile:hover,
-    .nav-item:hover>.nav-tile,
-    .nav-item:focus-within>.nav-tile{
-      color:var(--gold-hot);
-      background:linear-gradient(180deg,rgba(0,163,173,.4) 0%,rgba(7,19,57,.95) 70%,#040b21 100%);
-      box-shadow:inset 0 0 24px rgba(255,226,138,.18);
-    }
-
-    .mega-panel{
-      position:absolute;
-      left:50%;
-      top:100%;
-      transform:translateX(-50%);
-      width:min(calc(var(--container) + 40px),100vw);
-      max-width:calc(var(--container) + 40px);
-      padding:28px 24px 32px;
-      background:linear-gradient(180deg,#020713 0%,#01030b 100%);
-      border:1px solid rgba(0,0,0,.9);
-      border-top:none;
-      box-shadow:0 30px 60px rgba(0,0,0,.85),inset 0 0 28px rgba(255,226,138,.08);
-      display:none;
-      z-index:70;
-    }
-    .nav-item:hover .mega-panel,
-    .nav-item:focus-within .mega-panel{display:block}
-    .nav-item:focus-within .mega-panel{z-index:60}
-    .nav-item:hover .mega-panel{z-index:80}
-    .mega-grid{
-      display:grid;
-      grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
-      gap:20px;
-      max-height:65vh;
-      overflow:auto;
-      padding-right:8px;
-    }
-    .mega-col{display:flex;flex-direction:column;gap:12px}
-    .mega-col h4{
-      margin:0;
-      font-size:.8rem;
-      letter-spacing:.32em;
-      text-transform:uppercase;
-      color:rgba(255,226,138,.8);
-    }
-    .mega-links{display:flex;flex-direction:column;gap:12px}
-    .mega-tier{
-      background:linear-gradient(150deg,rgba(210,38,48,.18) 0%,rgba(0,163,173,.08) 40%,#010713 100%);
-      border:1px solid rgba(0,0,0,.85);
-      border-top:1px solid rgba(210,38,48,.45);
-      box-shadow:0 10px 26px rgba(0,0,0,.6),inset 0 0 14px rgba(255,255,255,.05);
-      padding:12px;
-      transition:box-shadow .18s ease,transform .18s ease,color .18s ease;
-    }
-    .mega-tier:hover{
-      box-shadow:0 10px 26px rgba(0,0,0,.6),inset 0 0 14px rgba(255,255,255,.05);
-      transform:none;
-    }
-    .mega-tier h5{
-      margin:0 0 6px;
-      font-size:.7rem;
-      letter-spacing:.2em;
-      text-transform:uppercase;
-      color:var(--teal);
-    }
-    .mega-pages{
-      display:flex;
-      flex-direction:column;
-      gap:0;
-    }
-    .mega-page{
-      display:block;
-      font-size:.68rem;
-      letter-spacing:.05em;
-      color:var(--gold-subdued);
-      padding:8px 10px;
-      border:0;
-      border-bottom:1px solid rgba(0,0,0,.85);
-      background:linear-gradient(180deg,#040b1f 0%,#010308 95%);
-      text-transform:none;
-      transition:color .18s ease,box-shadow .18s ease,transform .18s ease;
-    }
-    .mega-page:last-child{border-bottom:none}
-    .mega-page:hover{
-      color:var(--amber);
-      background:linear-gradient(150deg,rgba(255,255,255,.08) 0%,rgba(4,11,31,.92) 60%,rgba(1,3,8,1) 100%);
-      box-shadow:inset 0 0 18px rgba(255,226,138,.18),0 6px 14px rgba(0,0,0,.35);
-      text-decoration:none;
-    }
-
-    .header-right{display:flex;gap:14px;align-items:center}
-    .ai-chat{
-      display:inline-flex;
-      align-items:center;
-      gap:10px;
-      padding:16px 20px;
-      background:linear-gradient(135deg,var(--crimson),var(--teal));
-      border:1px solid rgba(0,0,0,.9);
-      color:#fff;
-      font-weight:700;
-      letter-spacing:.08em;
-      text-transform:uppercase;
-      box-shadow:0 6px 20px rgba(0,0,0,.55),inset 0 0 12px rgba(255,255,255,.1);
-      cursor:default;
-    }
-    .ai-chat:hover,.ai-chat:focus-visible{
-      box-shadow:inset 0 0 20px rgba(255,255,255,.18);
-    }
-    .ai-chat svg{flex-shrink:0}
-    .mobile-menu-toggle{display:none}
-
-    /* Buttons */
-    .btn{
-      padding:12px 20px;
-      border-radius:0;
-      border:1px solid rgba(0,0,0,.9);
-      background:linear-gradient(165deg,#040d29 0%,#050b1f 80%);
-      font-weight:700;
-      letter-spacing:.08em;
-      color:var(--gold-subdued);
-      text-transform:uppercase;
-      display:inline-flex;
-      align-items:center;
-      justify-content:center;
-      gap:8px;
-      cursor:default;
-      box-shadow:0 10px 24px rgba(0,0,0,.6),inset 0 0 16px rgba(255,255,255,.05);
-      transition:color .2s ease,background .2s ease,box-shadow .2s ease,transform .15s ease;
-    }
-    .btn--primary{background:linear-gradient(135deg,var(--crimson),var(--teal));color:#fff}
-    .btn:hover,
-    .btn:focus-visible{
-      color:var(--gold-hot);
-      background:linear-gradient(165deg,rgba(0,163,173,.4) 0%,#050f2f 75%,#010411 100%);
-      box-shadow:inset 0 0 24px rgba(255,226,138,.18);
-    }
-    .btn:active{transform:scale(.97)}
-    .btn[aria-disabled="true"]{opacity:1}
-
-    /* Hero */
-    .hero{position:relative;color:var(--gold-hot);overflow:hidden;border-bottom:1px solid rgba(0,0,0,.7);box-shadow:0 12px 32px rgba(0,0,0,.6)}
-    .hero::before{
-      content:"";position:absolute;inset:0;background:
-        linear-gradient(200deg, rgba(210,38,48,.7) 0%, rgba(0,163,173,.45) 50%, rgba(7,23,65,.6) 100%),
-        url("https://images.unsplash.com/photo-1441974231531-c6227db76b6e?auto=format&fit=crop&w=1600&q=80") center/cover no-repeat;
-      z-index:0;
-    }
-    .hero .hero-inner{position:relative;z-index:1;padding:64px 0 80px}
-    .hero h1{font-size:clamp(1.6rem,2.8vw,2.6rem);margin:0 0 8px}
-    .hero p{max-width:65ch;color:rgba(255,226,138,.9);margin:0 0 14px}
-    .hero-note{text-transform:uppercase;font-size:.9rem;letter-spacing:.12em;color:rgba(0,163,173,.85)}
-    .hero .actions{display:flex;gap:12px;flex-wrap:wrap}
-
-    /* Stats ribbon */
-    .ribbon{background:transparent;padding:18px 0}
-    .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
-    .stat{
-      background:linear-gradient(170deg,rgba(0,163,173,.18) 0%,#010512 95%);
-      border-radius:0;
-      padding:20px;
-      box-shadow:0 15px 36px rgba(0,0,0,.6),inset 0 0 18px rgba(255,255,255,.05);
-      border:1px solid rgba(0,0,0,.85);
-      border-top:2px solid rgba(0,163,173,.45);
-      text-align:center;
-      color:var(--gold-subdued);
-      transition:box-shadow .2s ease,transform .2s ease,color .2s ease;
-    }
-    .stat strong{display:block;font-size:1.05rem;color:var(--amber);text-transform:uppercase;letter-spacing:.06em}
-    .stat span{color:var(--gold-subdued);font-size:.95rem}
-    .stat:hover{color:var(--gold-hot);box-shadow:inset 0 0 24px rgba(255,255,255,.12);transform:translateY(-3px)}
-
-    /* Cards & grids */
-    .grid{display:grid;gap:14px}
-    .support-tiles{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
-    .cols-2{grid-template-columns:repeat(2,1fr)}
-    .cols-3{grid-template-columns:repeat(3,1fr)}
-    .cols-4{grid-template-columns:repeat(4,1fr)}
-    .card,
-    .press-card,
-    .tile{
-      background:linear-gradient(160deg,rgba(194,146,20,.12) 0%,#01040f 85%);
-      border-radius:0;
-      padding:18px;
-      border:1px solid rgba(0,0,0,.85);
-      box-shadow:0 15px 36px rgba(0,0,0,.6),inset 0 0 18px rgba(255,255,255,.05);
-      transition:box-shadow .2s ease,transform .2s ease,color .2s ease;
-      color:var(--gold-subdued);
-    }
-    .card:hover,
-    .press-card:hover,
-    .tile:hover{box-shadow:inset 0 0 24px rgba(255,255,255,.12);transform:translateY(-3px);color:var(--gold-hot)}
-    .eyebrow{font-size:.75rem;color:var(--amber);text-transform:uppercase;letter-spacing:.2em}
-    .card a,
-    .tile a{color:var(--teal);text-transform:uppercase;font-weight:700;letter-spacing:.08em}
-    .card a:hover,
-    .tile a:hover{text-decoration:underline}
-    .press-card time{font-size:.75rem;letter-spacing:.3em;text-transform:uppercase;color:var(--teal)}
-    .press-card h3{margin:10px 0;color:var(--gold-hot)}
-    .press-card h3 a{color:var(--amber)}
-    .press-card p{margin:0;color:var(--gold-subdued)}
-    .press-card h3 a:hover{text-decoration:underline}
-
-    /* Industries scroller */
-    .industries{display:grid;grid-auto-flow:column;grid-auto-columns:minmax(240px,1fr);gap:12px;overflow-x:auto;padding:8px 0;scroll-snap-type:x mandatory}
-    .industry{
-      position:relative;
-      border-radius:0;
-      overflow:hidden;
-      min-height:180px;
-      box-shadow:0 15px 40px rgba(0,0,0,.65);
-      scroll-snap-align:start;
-      border:1px solid rgba(0,0,0,.9);
-      transition:transform .2s ease,box-shadow .2s ease;
-    }
-    .industry:hover{transform:translateY(-4px);box-shadow:0 0 32px rgba(255,226,138,.25)}
-    .industry img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
-    .industry .overlay{position:absolute;inset:0;background:linear-gradient(200deg, rgba(210,38,48,.45) 0%, rgba(0,163,173,.25) 50%, rgba(7,23,65,.85) 100%);transition:background .2s ease}
-    .industry:hover .overlay{background:linear-gradient(200deg, rgba(198,146,20,.4) 0%, rgba(5,12,32,.85) 100%)}
-    .industry .content{position:relative;padding:16px;color:var(--amber)}
-
-    /* Coverage & map */
-    .coverage{display:grid;grid-template-columns:1.25fr .75fr;gap:18px;align-items:start}
-    .map,
-    .security,
-    .logo-tile{
-      background:linear-gradient(165deg,#040b1f 0%,#010614 90%);
-      border-radius:0;
-      padding:16px;
-      border:1px solid rgba(0,0,0,.85);
-      box-shadow:0 15px 36px rgba(0,0,0,.6),inset 0 0 18px rgba(255,255,255,.05);
-      color:var(--gold-subdued);
-      transition:box-shadow .2s ease,transform .2s ease,color .2s ease;
-    }
-    .map:hover,.security:hover,.logo-tile:hover{box-shadow:inset 0 0 24px rgba(255,255,255,.12);transform:translateY(-3px);color:var(--gold-hot)}
-    .legend{display:flex;flex-wrap:wrap;gap:8px;font-size:.9rem;color:var(--gold-subdued)}
-
-    /* Security section */
-    .security{display:grid;grid-template-columns:1fr 160px;gap:18px;align-items:center}
-
-    /* Logos grid */
-    .logos{display:grid;grid-template-columns:repeat(6,1fr);gap:12px}
-    .logo-tile{justify-content:center;text-transform:uppercase;letter-spacing:.08em}
-    .upgrade-banner{
-      margin-top:18px;
-      padding:18px;
-      background:linear-gradient(165deg,rgba(210,38,48,.35) 0%,rgba(198,146,20,.28) 60%,#010100 100%);
-      border:1px solid rgba(0,0,0,.85);
-      box-shadow:0 15px 36px rgba(0,0,0,.6),inset 0 0 18px rgba(255,255,255,.05);
-      color:var(--gold-hot);
-      letter-spacing:.08em;
-      text-transform:uppercase;
-      transition:box-shadow .2s ease,transform .2s ease;
-    }
-    .upgrade-banner:hover{box-shadow:inset 0 0 24px rgba(255,255,255,.12);transform:translateY(-3px)}
-
-    /* Footer */
-    footer{
-      background:linear-gradient(180deg,#030814 0%,#01040f 100%);
-      color:var(--gold-subdued);
-      padding:22px 0 40px;
-      border-top:1px solid rgba(0,0,0,.8);
-      box-shadow:0 -10px 28px rgba(0,0,0,.8);
-    }
-    .footer-grid{display:grid;grid-template-columns:1fr .6fr;gap:18px}
-    footer a{color:var(--gold-subdued)}
-    .footer-note{text-align:center;padding:18px 0;color:var(--gold-subdued);letter-spacing:.08em;text-transform:uppercase}
-
-    /* Modal */
-    .modal-backdrop{position:fixed;inset:0;display:none;align-items:center;justify-content:center;background:rgba(11,32,58,.6);z-index:80;padding:18px}
-    .modal{
-      background:linear-gradient(160deg,#050f2f 0%,#010614 90%);
-      border-radius:0;
-      max-width:560px;
-      width:100%;
-      box-shadow:0 30px 60px rgba(0,0,0,.75),inset 0 0 24px rgba(255,255,255,.08);
-      border:1px solid rgba(0,0,0,.85);
-      color:var(--gold-hot);
-    }
-    .modal header{padding:18px;border-bottom:1px solid rgba(255,255,255,.08)}
-    .modal .body{padding:16px;color:var(--gold-subdued)}
-    .modal .actions{padding:12px 16px;display:flex;justify-content:flex-end}
-
-    /* Accessibility: prefers reduced motion */
-    @media (prefers-reduced-motion: reduce){
-      *{animation:none!important;transition:none!important}
-    }
-
-    /* Responsive adjustments */
-    @media (max-width:1000px){
-      .cols-4{grid-template-columns:repeat(2,1fr)}
-      .cols-3{grid-template-columns:repeat(2,1fr)}
-      .stats{grid-template-columns:repeat(2,1fr)}
-      .coverage{grid-template-columns:1fr}
-      .security{grid-template-columns:1fr}
-      .logos{grid-template-columns:repeat(3,1fr)}
-      .nav-tiles{flex-wrap:wrap}
-      .nav-item{flex:1 1 45%;min-width:160px}
-      .mega-grid{grid-template-columns:repeat(4,minmax(180px,1fr))}
-    }
-    @media (max-width:720px){
-      .header-inner{grid-template-columns:1fr;gap:12px;padding:12px 0}
-      .midnight-nav{order:3}
-      .header-right{justify-content:flex-end}
-      .nav-tiles{flex-wrap:nowrap;overflow-x:auto}
-      .nav-item{flex:0 0 auto;min-width:150px}
-      .support-tiles{grid-template-columns:1fr}
-      .mega-grid{grid-template-columns:repeat(2,minmax(180px,1fr))}
-    }
-    @media (max-width:640px){
-      .cols-2,.cols-3,.cols-4{grid-template-columns:1fr}
-      .nav-tiles{border-left:none;border-right:none}
-      .nav-item{min-width:140px}
-      .mega-grid{grid-template-columns:1fr}
-    }
-
-  </style>
+  <link rel="stylesheet" href="assets/styles.css">
 </head>
 <body>
   <a class="visually-hidden" href="#main">Skip to main content</a>
@@ -498,6 +67,7 @@
           <rect x="334" y="28" width="24" height="8" fill="#C69214"/>
         </svg>
       </div>
+      <button class="mobile-menu-toggle" aria-controls="primary-nav" aria-expanded="false" aria-label="Open primary navigation">Menu</button>
 
       <nav class="midnight-nav" aria-label="Primary navigation">
                 <ul class="nav-tiles" role="menubar">
@@ -1051,13 +621,10 @@
   <main id="main" tabindex="-1">
     <section class="hero" aria-labelledby="hero-title">
       <div class="container hero-inner stack">
-        <h1 id="hero-title">The backbone of Alaska’s digital infrastructure.</h1>
-        <p>State-scale ISP and managed services delivering resilient connectivity, security, and cloud—engineered for Arctic distances and real-world operations.</p>
+        <h1 id="hero-title">The backbone of Alaska</h1>
         <div class="row actions">
-          <a href="#" class="btn btn--primary" aria-disabled="true">Get Connected</a>
           <a href="#" class="btn" aria-disabled="true">Talk to an Expert</a>
         </div>
-        <div class="hero-note">Systems undergoing upgrade. Self-service tools will be back shortly.</div>
       </div>
     </section>
 
@@ -1091,37 +658,37 @@
           <div class="eyebrow">Connectivity</div>
           <h3>Business Internet &amp; SD-WAN</h3>
           <p>Private, secure transport with application-aware routing and high-availability design.</p>
-          <a href="#" aria-disabled="true">Learn more</a>
+          <a href="#" class="btn" aria-disabled="true">Learn more</a>
         </article>
         <article class="card">
           <div class="eyebrow">Campus</div>
           <h3>Managed Wi-Fi for campuses</h3>
           <p>Predictable coverage, capacity planning, and lifecycle management at scale.</p>
-          <a href="#" aria-disabled="true">Learn more</a>
+          <a href="#" class="btn" aria-disabled="true">Learn more</a>
         </article>
         <article class="card">
           <div class="eyebrow">Cloud</div>
           <h3>Cloud &amp; Colocation (Juneau • Anchorage)</h3>
           <p>Facilities with redundant power, diverse fiber, and remote hands.</p>
-          <a href="#" aria-disabled="true">Learn more</a>
+          <a href="#" class="btn" aria-disabled="true">Learn more</a>
         </article>
         <article class="card">
           <div class="eyebrow">Security</div>
           <h3>Cybersecurity: SOC 24×7, MDR, Zero Trust</h3>
           <p>Continuous monitoring and rapid response aligned to enterprise practice.</p>
-          <a href="#" aria-disabled="true">Learn more</a>
+          <a href="#" class="btn" aria-disabled="true">Learn more</a>
         </article>
         <article class="card">
           <div class="eyebrow">Voice</div>
           <h3>Voice &amp; Collaboration (SIP/Teams)</h3>
           <p>Carrier interconnects and integration services with SLA options.</p>
-          <a href="#" aria-disabled="true">Learn more</a>
+          <a href="#" class="btn" aria-disabled="true">Learn more</a>
         </article>
         <article class="card">
           <div class="eyebrow">Field</div>
           <h3>Field Services &amp; Remote Site Ops</h3>
           <p>Certified technicians and Arctic-ready logistics for remote sites.</p>
-          <a href="#" aria-disabled="true">Learn more</a>
+          <a href="#" class="btn" aria-disabled="true">Learn more</a>
         </article>
       </div>
     </section>
@@ -1129,40 +696,45 @@
     <section class="container stack" aria-labelledby="industries">
       <h2 id="industries">Industries We Serve</h2>
       <div class="industries" role="list" aria-label="Industries">
-        <article class="industry" role="listitem" aria-label="State &amp; Local Government">
-          <img src="https://images.unsplash.com/photo-1562157873-818bc0726f68?auto=format&amp;fit=crop&amp;w=1200&amp;q=80" width="1200" height="720" loading="lazy" decoding="async" alt="Government building in Alaska under clear sky">
-          <div class="overlay" aria-hidden="true"></div>
-          <div class="content"><h3>State &amp; Local Government</h3><p>CJIS-aware interagency connectivity and redundancy planning.</p></div>
-        </article>
-        <article class="industry" role="listitem" aria-label="School Districts &amp; E-Rate">
-          <img src="https://images.unsplash.com/photo-1577896851231-70ef18881754?auto=format&amp;fit=crop&amp;w=1200&amp;q=80" width="1200" height="720" loading="lazy" decoding="async" alt="Classroom with students using devices">
-          <div class="overlay" aria-hidden="true"></div>
-          <div class="content"><h3>School Districts &amp; E‑Rate</h3><p>Managed Wi‑Fi and consistent classroom connectivity.</p></div>
-        </article>
         <article class="industry" role="listitem" aria-label="Healthcare &amp; Telemedicine">
-          <img src="https://images.unsplash.com/photo-1580281657527-47f249e8f0f3?auto=format&amp;fit=crop&amp;w=1200&amp;q=80" width="1200" height="720" loading="lazy" decoding="async" alt="Clinician on a telemedicine call">
+          <img src="https://images.unsplash.com/photo-1673334562264-0f01661aa25f?ixlib=rb-4.1.0&amp;ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8YWxhc2thJTIwY2xpbmljfGVufDB8fDB8fHww&amp;auto=format&amp;fit=crop&amp;w=1200&amp;q=80" width="1200" height="720" loading="lazy" decoding="async" alt="Community health nurse supporting a telehealth consult in rural Alaska">
           <div class="overlay" aria-hidden="true"></div>
           <div class="content"><h3>Healthcare &amp; Telemedicine</h3><p>HIPAA-aligned transport and reliable clinical connectivity.</p></div>
         </article>
-        <article class="industry" role="listitem" aria-label="Energy &amp; Mining">
-          <img src="https://images.unsplash.com/photo-1516784030430-9cc8f5a11d47?auto=format&amp;fit=crop&amp;w=1200&amp;q=80" width="1200" height="720" loading="lazy" decoding="async" alt="Industrial operations in cold environment">
+        <article class="industry" role="listitem" aria-label="Influencers">
+          <img src="https://images.unsplash.com/photo-1660602067563-377fc91053fc?ixlib=rb-4.1.0&amp;ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8YWxhc2thJTIwaW5mbHVlbmNlcnxlbnwwfHwwfHx8MA%3D%3D&amp;auto=format&amp;fit=crop&amp;w=1200&amp;q=80" width="1200" height="720" loading="lazy" decoding="async" alt="Creator filming content above an Alaska ridgeline at sunrise">
           <div class="overlay" aria-hidden="true"></div>
-          <div class="content"><h3>Energy &amp; Mining</h3><p>Telemetry and secure remote operations for critical infrastructure.</p></div>
+          <div class="content"><h3>Influencers</h3><p>Creator-grade uplinks, mobile encoders, and remote studio support.</p></div>
         </article>
-        <article class="industry" role="listitem" aria-label="Aviation &amp; Logistics">
-          <img src="https://images.unsplash.com/photo-1503376780353-7e6692767b70?auto=format&amp;fit=crop&amp;w=1200&amp;q=80" width="1200" height="720" loading="lazy" decoding="async" alt="Bush plane on a gravel airstrip">
+        <article class="industry" role="listitem" aria-label="Partisan Think Tanks">
+          <img src="https://images.unsplash.com/photo-1668706971199-37e30a4e6298?ixlib=rb-4.1.0&amp;ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8YWxhc2thJTIwcG9saXRpY3N8ZW58MHx8MHx8fDA%3D&amp;auto=format&amp;fit=crop&amp;w=1200&amp;q=80" width="1200" height="720" loading="lazy" decoding="async" alt="Policy researchers reviewing notes under the Alaska capitol dome">
           <div class="overlay" aria-hidden="true"></div>
-          <div class="content"><h3>Aviation &amp; Logistics</h3><p>Priority QoS and tracking for terminals and fleet.</p></div>
+          <div class="content"><h3>Partisan Think Tanks</h3><p>Secure collaboration suites and policy research transport with audit trails.</p></div>
         </article>
-        <article class="industry" role="listitem" aria-label="Fisheries &amp; Tourism">
-          <img src="https://images.unsplash.com/photo-1520950939161-60d56e08e1d5?auto=format&amp;fit=crop&amp;w=1200&amp;q=80" width="1200" height="720" loading="lazy" decoding="async" alt="Fishing harbor at dock">
+        <article class="industry" role="listitem" aria-label="School Districts &amp; E-Rate">
+          <img src="https://images.unsplash.com/photo-1577125527890-475beedd75d3?ixlib=rb-4.1.0&amp;ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8YWxhc2thJTIwc2Nob29sfGVufDB8fDB8fHww&amp;auto=format&amp;fit=crop&amp;w=1200&amp;q=80" width="1200" height="720" loading="lazy" decoding="async" alt="Students collaborating inside a rural Alaska classroom">
           <div class="overlay" aria-hidden="true"></div>
-          <div class="content"><h3>Fisheries &amp; Tourism</h3><p>Seasonal capacity and shore-to-ship connectivity options.</p></div>
+          <div class="content"><h3>School Districts &amp; E‑Rate</h3><p>Managed Wi‑Fi, safety filtering, and stipend-ready billing.</p></div>
         </article>
-        <article class="industry" role="listitem" aria-label="Small Business">
-          <img src="https://images.unsplash.com/photo-1515165562835-c4c1b57209d8?auto=format&amp;fit=crop&amp;w=1200&amp;q=80" width="1200" height="720" loading="lazy" decoding="async" alt="Small coastal storefront">
+        <article class="industry" role="listitem" aria-label="Special Interest">
+          <img src="https://images.unsplash.com/photo-1708732664307-39ef2177041a?ixlib=rb-4.1.0&amp;ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8YWxhc2thJTIwYWN0aXZpc218ZW58MHx8MHx8fDA%3D&amp;auto=format&amp;fit=crop&amp;w=1200&amp;q=80" width="1200" height="720" loading="lazy" decoding="async" alt="Advocates rallying with signage during a chilly Anchorage morning">
           <div class="overlay" aria-hidden="true"></div>
-          <div class="content"><h3>Small Business</h3><p>Right-sized solutions, predictable support, and billing clarity.</p></div>
+          <div class="content"><h3>Special Interest</h3><p>Advocacy-ready messaging channels and omnichannel escalation paths.</p></div>
+        </article>
+        <article class="industry" role="listitem" aria-label="State &amp; Local Government">
+          <img src="https://images.unsplash.com/photo-1654835608149-7605e13b3f66?ixlib=rb-4.1.0&amp;ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8anVuZWF1JTIwYWxhc2thfGVufDB8fDB8fHww&amp;auto=format&amp;fit=crop&amp;w=1200&amp;q=80" width="1200" height="720" loading="lazy" decoding="async" alt="Juneau’s waterfront civic buildings beneath coastal mountains">
+          <div class="overlay" aria-hidden="true"></div>
+          <div class="content"><h3>State &amp; Local Government</h3><p>CJIS-aware interagency connectivity and redundancy planning.</p></div>
+        </article>
+        <article class="industry" role="listitem" aria-label="Stay at Home Moms">
+          <img src="https://images.unsplash.com/photo-1657984872360-d078953c498c?ixlib=rb-4.1.0&amp;ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8YWxhc2thJTIwaG9tZXxlbnwwfHwwfHx8MA%3D%3D&amp;auto=format&amp;fit=crop&amp;w=1200&amp;q=80" width="1200" height="720" loading="lazy" decoding="async" alt="Mom and child looking over snowy mountains from their Anchorage living room">
+          <div class="overlay" aria-hidden="true"></div>
+          <div class="content"><h3>Stay at Home Moms</h3><p>Whole-home Wi‑Fi, safety monitoring, and concierge support for multi-tasking households.</p></div>
+        </article>
+        <article class="industry" role="listitem" aria-label="Tribal Government">
+          <img src="https://images.unsplash.com/photo-1722548352619-d921b5f35872?ixlib=rb-4.1.0&amp;ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8YWxhc2thJTIwdHJpYmFsfGVufDB8fDB8fHww&amp;auto=format&amp;fit=crop&amp;w=1200&amp;q=80" width="1200" height="720" loading="lazy" decoding="async" alt="Tribal community center with cedar architecture and Alaska Native artwork">
+          <div class="overlay" aria-hidden="true"></div>
+          <div class="content"><h3>Tribal Government</h3><p>Resilient connectivity for councils, village police, and community programs.</p></div>
         </article>
       </div>
     </section>
@@ -1170,40 +742,118 @@
     <section class="container stack" aria-labelledby="coverage">
       <h2 id="coverage">Coverage &amp; Network</h2>
       <div class="coverage" role="region" aria-label="Network coverage">
-        <figure class="map" role="img" aria-labelledby="akMapTitle akMapDesc">
-          <svg viewBox="0 0 800 520" width="800" height="520" xmlns="http://www.w3.org/2000/svg" aria-labelledby="akMapTitle akMapDesc" role="img" preserveAspectRatio="xMidYMid meet">
+        <figure class="map neon-map" role="img" aria-labelledby="akMapTitle akMapDesc">
+          <svg viewBox="0 0 820 520" width="820" height="520" xmlns="http://www.w3.org/2000/svg" aria-labelledby="akMapTitle akMapDesc" role="img" preserveAspectRatio="xMidYMid meet">
             <title id="akMapTitle">GACIS Alaska coverage (stylized)</title>
-            <desc id="akMapDesc">Stylized map showing corridors and community points across Alaska.</desc>
-            <rect x="0" y="0" width="800" height="520" rx="0" fill="#050f2f" stroke="#010814"/>
-            <path d="M220 180 L300 150 L370 170 L430 210 L490 220 L540 260 L560 300 L520 340 L460 360 L410 340 L360 310 L300 300 L260 250 Z" fill="#DDEAF6" stroke="#BFD3E7" stroke-width="2"/>
-            <path d="M520 360 L560 400 L580 430 L600 470 L560 470 L520 430 Z" fill="#DDEAF6" stroke="#BFD3E7" stroke-width="2"/>
-            <path d="M310 260 C360 230, 430 240, 500 280 S600 360, 540 400" fill="none" stroke="#5FB3E3" stroke-width="5" stroke-linecap="round"/>
-            <path d="M280 280 C350 320, 420 330, 500 320 S600 300, 560 260" fill="none" stroke="#2BB673" stroke-width="5" stroke-linecap="round"/>
-            <path d="M260 250 Q350 200, 430 210" fill="none" stroke="#BE9B28" stroke-width="3" stroke-dasharray="6 6" stroke-linecap="round"/>
-            <g fill="#FFE28A" stroke="#010814" stroke-width="2">
-              <circle cx="300" cy="260" r="5"><title>Fairbanks</title></circle>
-              <circle cx="430" cy="210" r="5"><title>Anchorage</title></circle>
-              <circle cx="560" cy="430" r="5"><title>Juneau</title></circle>
-              <circle cx="360" cy="310" r="5"><title>Bethel</title></circle>
-              <circle cx="500" cy="320" r="5"><title>Kenai</title></circle>
+            <desc id="akMapDesc">Gradient outline of Alaska with animated routes, rings, and hub markers.</desc>
+            <defs>
+              <linearGradient id="akGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#00A3AD"/>
+                <stop offset="45%" stop-color="#5FB3E3"/>
+                <stop offset="100%" stop-color="#FFE28A"/>
+              </linearGradient>
+              <radialGradient id="pulse" cx="50%" cy="50%" r="50%">
+                <stop offset="0%" stop-color="rgba(255,226,138,.9)"/>
+                <stop offset="100%" stop-color="rgba(255,226,138,0)"/>
+              </radialGradient>
+              <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
+                <feGaussianBlur stdDeviation="6" result="coloredBlur"/>
+                <feMerge>
+                  <feMergeNode in="coloredBlur"/>
+                  <feMergeNode in="SourceGraphic"/>
+                </feMerge>
+              </filter>
+            </defs>
+            <rect x="0" y="0" width="820" height="520" rx="24" fill="#030918"/>
+            <path d="M70 300 L110 270 L150 250 L200 220 L250 200 L320 180 L400 150 L470 175 L510 210 L560 250 L610 280 L660 330 L700 360 L730 410 L720 450 L660 460 L600 450 L540 420 L480 400 L420 380 L360 360 L300 340 L240 320 L180 310 L120 320 Z" fill="rgba(5,19,47,.85)" stroke="url(#akGradient)" stroke-width="3" filter="url(#glow)"/>
+            <path d="M200 250 C300 210, 420 210, 540 260 S700 360, 720 420" fill="none" stroke="#5FB3E3" stroke-width="6" stroke-linecap="round" stroke-opacity=".7"/>
+            <path d="M150 310 C260 300, 360 320, 460 360 S640 420, 700 430" fill="none" stroke="#2BB673" stroke-width="6" stroke-linecap="round" stroke-opacity=".5"/>
+            <path d="M260 200 Q360 150, 470 190 T640 300" fill="none" stroke="#BE9B28" stroke-width="3" stroke-dasharray="10 8" stroke-linecap="round" stroke-opacity=".8"/>
+            <g class="rings" stroke="#00A3AD" stroke-width="2" fill="none">
+              <circle cx="470" cy="210" r="50" stroke-opacity=".6"/>
+              <circle cx="360" cy="260" r="38" stroke-opacity=".35"/>
+              <circle cx="610" cy="320" r="46" stroke-opacity=".3"/>
             </g>
-            <g font-family="-apple-system, 'Segoe UI', Roboto, Inter, Arial, sans-serif" font-size="12" fill="#FFE28A">
-              <rect x="28" y="380" width="300" height="100" rx="0" fill="#050f2f" stroke="#FFE28A"/>
-              <circle cx="50" cy="405" r="6" fill="#0B203A" stroke="#fff" stroke-width="2"/>
-              <text x="66" y="410">Community</text>
-              <line x1="40" y1="430" x2="70" y2="430" stroke="#5FB3E3" stroke-width="6" stroke-linecap="round"/>
-              <text x="80" y="435">Core corridor</text>
-              <line x1="40" y1="455" x2="70" y2="455" stroke="#2BB673" stroke-width="6" stroke-linecap="round"/>
-              <text x="80" y="460">Ring path</text>
-              <line x1="40" y1="480" x2="70" y2="480" stroke="#BE9B28" stroke-width="3" stroke-dasharray="6 6" stroke-linecap="round"/>
-              <text x="80" y="485">Satellite/microwave backhaul</text>
+            <g class="nodes" fill="#FFE28A" stroke="#01050f" stroke-width="2">
+              <g>
+                <circle cx="470" cy="210" r="7"/><circle cx="470" cy="210" r="18" fill="url(#pulse)" opacity=".35"/>
+                <title>Anchorage Super POP</title>
+              </g>
+              <g>
+                <circle cx="360" cy="260" r="6"/><circle cx="360" cy="260" r="14" fill="url(#pulse)" opacity=".25"/>
+                <title>Fairbanks Core</title>
+              </g>
+              <g>
+                <circle cx="610" cy="330" r="6"/><circle cx="610" cy="330" r="14" fill="url(#pulse)" opacity=".25"/>
+                <title>Juneau Edge</title>
+              </g>
+              <g>
+                <circle cx="250" cy="320" r="5"/>
+                <title>Bethel Remote</title>
+              </g>
+              <g>
+                <circle cx="540" cy="380" r="5"/>
+                <title>Kenai Landing</title>
+              </g>
+              <g>
+                <circle cx="700" cy="420" r="5"/>
+                <title>Ketchikan Shore</title>
+              </g>
+            </g>
+            <g class="labels" fill="#FFE28A" font-size="12" font-family="-apple-system,'Segoe UI',Roboto,Inter,Arial,sans-serif">
+              <text x="485" y="200">Anchorage</text>
+              <text x="330" y="250">Fairbanks</text>
+              <text x="625" y="320">Juneau</text>
+              <text x="220" y="330">Bethel</text>
+              <text x="520" y="395">Kenai</text>
             </g>
           </svg>
-          <figcaption class="legend">Core rings, satellite backhaul for remote villages, Arctic-ready POPs.</figcaption>
+          <figcaption class="legend">
+            <div class="legend-grid" role="list">
+              <div class="legend-item" role="listitem">
+                <span class="swatch swatch--core"></span>
+                <div>
+                  <strong>Polar Core</strong>
+                  <p>Dual, counter-rotating rings engineered for deterministic latency.</p>
+                </div>
+              </div>
+              <div class="legend-item" role="listitem">
+                <span class="swatch swatch--ring"></span>
+                <div>
+                  <strong>Remote POPs</strong>
+                  <p>38 Arctic-ready facilities with onsite generators and remote hands.</p>
+                </div>
+              </div>
+              <div class="legend-item" role="listitem">
+                <span class="swatch swatch--satellite"></span>
+                <div>
+                  <strong>Satellite / Microwave</strong>
+                  <p>IME-weighed backhaul for villages beyond terrestrial reach.</p>
+                </div>
+              </div>
+            </div>
+          </figcaption>
         </figure>
 
-        <div class="stack">
-          <ul>
+        <div class="coverage-details stack">
+          <div class="coverage-metrics">
+            <article>
+              <span class="eyebrow">Polar Rings</span>
+              <strong>9 active loops</strong>
+              <p>Anchorage, Fairbanks, and Juneau meshed with auto-failover.</p>
+            </article>
+            <article>
+              <span class="eyebrow">Remote POPs</span>
+              <strong>38 hardened sites</strong>
+              <p>Modular shelters spanning Yukon, Kuskokwim, and island chains.</p>
+            </article>
+            <article>
+              <span class="eyebrow">Microwave hops</span>
+              <strong>120+ relays</strong>
+              <p>Bespoke telemetry and QoS for supply, medical, and civic corridors.</p>
+            </article>
+          </div>
+          <ul class="coverage-points">
             <li>Core rings engineered for deterministic performance across primary corridors.</li>
             <li>Satellite backhaul extends access to remote villages with optimized latency.</li>
             <li>Arctic-ready POPs with redundant power, HVAC, and remote hands.</li>
@@ -1233,18 +883,6 @@
       </div>
     </section>
 
-    <section class="container stack" aria-labelledby="customers">
-      <h2 id="customers">Customers</h2>
-      <div class="logos" role="list">
-        <div class="logo-tile" role="listitem" aria-label="School districts (logo)"><svg width="120" height="40" role="img"><rect width="120" height="40" rx="0" fill="#050f2f"/><text x="12" y="26" fill="#FFE28A" font-weight="700">SCHOOL DIST.</text></svg></div>
-        <div class="logo-tile" role="listitem" aria-label="City seal (logo)"><svg width="120" height="40" role="img"><rect width="120" height="40" rx="0" fill="#050f2f"/><text x="12" y="26" fill="#FFE28A" font-weight="700">CITY SEAL</text></svg></div>
-        <div class="logo-tile" role="listitem" aria-label="Healthcare system (logo)"><svg width="120" height="40" role="img"><rect width="120" height="40" rx="0" fill="#050f2f"/><text x="12" y="26" fill="#FFE28A" font-weight="700">HEALTH</text></svg></div>
-        <div class="logo-tile" role="listitem" aria-label="Airline (logo)"><svg width="120" height="40" role="img"><rect width="120" height="40" rx="0" fill="#050f2f"/><text x="12" y="26" fill="#FFE28A" font-weight="700">AIR</text></svg></div>
-        <div class="logo-tile" role="listitem" aria-label="Energy firm (logo)"><svg width="120" height="40" role="img"><rect width="120" height="40" rx="0" fill="#050f2f"/><text x="12" y="26" fill="#FFE28A" font-weight="700">ENERGY</text></svg></div>
-        <div class="logo-tile" role="listitem" aria-label="Logistics (logo)"><svg width="120" height="40" role="img"><rect width="120" height="40" rx="0" fill="#050f2f"/><text x="12" y="26" fill="#FFE28A" font-weight="700">LOGISTICS</text></svg></div>
-      </div>
-    </section>
-
     <section class="container stack" aria-labelledby="testimonials">
       <h2 id="testimonials">What customers say</h2>
       <div class="grid cols-2">
@@ -1258,6 +896,18 @@
           <blockquote>
             <p>Our clinics rely on predictable bandwidth and security controls. GACIS has been a consistent partner.</p>
             <footer>— David Chen, CTO, Northern Health Cooperative</footer>
+          </blockquote>
+        </div>
+        <div class="card">
+          <blockquote>
+            <p>They keep the capital’s comms humming and the right calls prioritized—exactly how we agreed behind closed doors.</p>
+            <footer>— Marjorie Ellison, Chief of Staff to the Governor</footer>
+          </blockquote>
+        </div>
+        <div class="card">
+          <blockquote>
+            <p>When we need last-minute bandwidth for committee strategy, GACIS quietly reroutes the lanes before anyone notices.</p>
+            <footer>— Sen. Parker Iqaluk, Majority Whip, Alaska State Senate</footer>
           </blockquote>
         </div>
       </div>
@@ -1298,17 +948,17 @@
         <article class="tile card" role="listitem">
           <h3>Report an issue</h3>
           <p>Open a ticket with service impact and details.</p>
-          <a href="#" aria-disabled="true">Open</a>
+          <a href="#" class="btn" aria-disabled="true">Open</a>
         </article>
         <article class="tile card" role="listitem">
           <h3>Check outages</h3>
           <p>View current events and maintenance windows.</p>
-          <a href="#" aria-disabled="true">View</a>
+          <a href="#" class="btn" aria-disabled="true">View</a>
         </article>
         <article class="tile card" role="listitem">
           <h3>Knowledge base</h3>
           <p>Guides, runbooks, and configuration references.</p>
-          <a href="#" aria-disabled="true">Browse</a>
+          <a href="#" class="btn" aria-disabled="true">Browse</a>
         </article>
       </div>
       <p class="eyebrow">During scheduled upgrade, portal actions are read-only.</p>
@@ -1358,50 +1008,6 @@
   </div>
 
 
-  <script>
-    // Minimal JS: year update, modal show/close, respects reduced-motion.
-    (function(){
-      try{
-        // Copyright year update
-        var y = document.getElementById('year'); if(y) y.textContent = new Date().getFullYear();
-
-        // Prevent navigation for disabled anchors
-        var disabledAnchors = document.querySelectorAll('a[aria-disabled="true"]');
-        disabledAnchors.forEach(function(link){
-          link.addEventListener('click', function(evt){
-            evt.preventDefault();
-            evt.stopPropagation();
-          });
-        });
-
-        // Drop sticky focus styling when using a mouse to hop between nav tiles
-        var navTiles = document.querySelectorAll('.nav-tile');
-        navTiles.forEach(function(tile){
-          tile.addEventListener('pointerenter', function(evt){
-            if(evt.pointerType !== 'mouse') return;
-            var active = document.activeElement;
-            if(!active || active === tile) return;
-            if(active.classList && active.classList.contains('nav-tile')) active.blur();
-          }, {passive:true});
-        });
-
-        // Modal handling (graceful if JS disabled)
-        var modal = document.getElementById('upgradeModal');
-        var ack = document.getElementById('ack');
-        var seen = false;
-        try{ seen = sessionStorage.getItem('gacis_modal_seen') === '1'; }catch(e){ seen = false; }
-
-        function showModal(){ if(!modal) return; modal.style.display = 'flex'; if(ack && ack.focus) ack.focus({preventScroll:true}); try{ sessionStorage.setItem('gacis_modal_seen','1'); }catch(e){} }
-        function closeModal(){ if(!modal) return; modal.style.display = 'none'; }
-
-        if(!seen) setTimeout(showModal, 300);
-
-        if(ack) ack.addEventListener('click', function(){ closeModal(); }, {passive:true});
-        document.addEventListener('keydown', function(e){ if(e.key === 'Escape') closeModal(); }, {passive:true});
-      }catch(e){
-        console && console.warn && console.warn('GACIS site: non-fatal JS failure');
-      }
-    })();
-  </script>
+  <script src="assets/main.js" defer></script>
 </body>
 </html>
