@@ -104,7 +104,10 @@
       navItems.forEach(function (item) {
         item.classList.remove('open');
         var btn = item.querySelector('.nav-tile');
-        if (btn) btn.setAttribute('aria-expanded', 'false');
+        if (btn) {
+          btn.setAttribute('aria-expanded', 'false');
+          if (btn.blur) btn.blur();
+        }
       });
     }
 
@@ -124,11 +127,15 @@
           if (other !== item) {
             other.classList.remove('open');
             var b = other.querySelector('.nav-tile');
-            if (b) b.setAttribute('aria-expanded', 'false');
+            if (b) {
+              b.setAttribute('aria-expanded', 'false');
+              if (b.blur) b.blur();
+            }
           }
         });
         item.classList.toggle('open', willOpen);
         btn.setAttribute('aria-expanded', String(willOpen));
+        if (!willOpen && btn.blur) btn.blur();
       });
     });
 
