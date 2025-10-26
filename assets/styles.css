@@ -633,6 +633,8 @@ body { padding-bottom: env(safe-area-inset-bottom, 0); }
   /* Hide absolute mega-panel on mobile and use the same element in-flow */
   .mega-panel{position:static;transform:none;width:auto;padding:12px 0 18px;background:transparent;border:none;box-shadow:none;display:none}
   .nav-item.open .mega-panel{display:block}
+  .nav-item:hover .mega-panel,
+  .nav-item:focus-within .mega-panel{display:none}
   .mega-grid{padding-right:0;max-height:none;overflow:visible;grid-template-columns:1fr}
   .mega-tier{background:transparent;border:0;padding:8px}
   .mega-page{padding-left:10px}
