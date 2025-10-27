@@ -1,6 +1,6 @@
 /* assets/main.js
    Extended mobile navigation implementation:
-   - retains previous behavior (year update, disabled anchors, modal)
+   - retains previous behavior (year update, disabled anchors)
    - implements off-canvas drilldown mobile nav that parses the existing mega-menu DOM
    - search/typeahead, session persistence, focus-trap, body scroll lock
 */
@@ -13,12 +13,37 @@
   function $(sel, ctx) { return qs(sel, ctx); }
 
   document.addEventListener('DOMContentLoaded', function () {
-    // Quick test helper: if URL contains ?nomodal=1 set sessionStorage to suppress the modal during QA.
+    // Rotate hero photography on each load (desktop + mobile).
+    var heroImages = [
+      'url("https://images.unsplash.com/photo-1470770841072-f978cf4d019e?auto=format&fit=crop&w=2000&q=80")',
+      'url("https://images.unsplash.com/photo-1470770903676-69b98201ea1c?auto=format&fit=crop&w=2000&q=80")',
+      'url("https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=2000&q=80")',
+      'url("https://images.unsplash.com/photo-1473186505569-9c61870c11f9?auto=format&fit=crop&w=2000&q=80")',
+      'url("https://images.unsplash.com/photo-1501785888041-af3ef285b470?auto=format&fit=crop&w=2000&q=80")',
+      'url("https://images.unsplash.com/photo-1469474968028-56623f02e42e?auto=format&fit=crop&w=2000&q=80")',
+      'url("https://images.unsplash.com/photo-1502082553048-f009c37129b9?auto=format&fit=crop&w=2000&q=80")',
+      'url("https://images.unsplash.com/photo-1476041800959-2f6bb412c8ce?auto=format&fit=crop&w=2000&q=80")',
+      'url("https://images.unsplash.com/photo-1466027131042-fb475e91e6c0?auto=format&fit=crop&w=2000&q=80")',
+      'url("https://images.unsplash.com/photo-1482192505345-5655af888cc4?auto=format&fit=crop&w=2000&q=80")',
+      'url("https://images.unsplash.com/photo-1477519242566-6ae87c31d212?auto=format&fit=crop&w=2000&q=80")',
+      'url("https://images.unsplash.com/photo-1456926631375-92c8ce872def?auto=format&fit=crop&w=2000&q=80")',
+      'url("https://images.unsplash.com/photo-1445308394109-4ec2920981b1?auto=format&fit=crop&w=2000&q=80")',
+      'url("https://images.unsplash.com/photo-1478479474071-8a3014d422c8?auto=format&fit=crop&w=2000&q=80")',
+      'url("https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?auto=format&fit=crop&w=2000&q=80")',
+      'url("https://images.unsplash.com/photo-1509827720381-5afcfea4d38e?auto=format&fit=crop&w=2000&q=80")',
+      'url("https://images.unsplash.com/photo-1469474941776-292192aad1ce?auto=format&fit=crop&w=2000&q=80")',
+      'url("https://images.unsplash.com/photo-1526481280695-3c469805ac05?auto=format&fit=crop&w=2000&q=80")',
+      'url("https://images.unsplash.com/photo-1470246973918-29a93221c455?auto=format&fit=crop&w=2000&q=80")',
+      'url("https://images.unsplash.com/photo-1500534310661-30e8d02a4fd5?auto=format&fit=crop&w=2000&q=80")'
+    ];
     try {
-      if (typeof location !== 'undefined' && location.search && location.search.indexOf('nomodal=1') !== -1) {
-        try { sessionStorage.setItem('gacis_modal_seen', '1'); } catch (e) {}
+      var heroSection = qs('.hero');
+      if (heroSection && heroImages.length) {
+        var heroImage = heroImages[Math.floor(Math.random() * heroImages.length)];
+        heroSection.style.setProperty('--hero-photo', heroImage);
       }
     } catch (e) {}
+
     // Force-mobile QA helper: if URL contains ?forceMobile=1, add a class that makes mobile rules apply at desktop widths.
     try {
       if (typeof location !== 'undefined' && location.search && location.search.indexOf('forceMobile=1') !== -1) {
@@ -37,7 +62,7 @@
     // focusable selector
     var FOCUSABLE = 'a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])';
 
-    // --- Keep existing behaviors: year, disabled anchors, modal ---
+    // --- Keep existing behaviors: year and disabled anchors ---
     try {
       var y = qs('#year'); if(y) y.textContent = new Date().getFullYear();
     } catch(e){}
@@ -47,17 +72,6 @@
         link.addEventListener('click', function (evt) { evt.preventDefault(); evt.stopPropagation(); });
         link.addEventListener('keydown', function (evt) { if (evt.key === 'Enter') { evt.preventDefault(); evt.stopPropagation(); } });
       });
-    } catch(e){}
-
-    // Modal handling (unchanged)
-    var modal = qs('#upgradeModal'), ack = qs('#ack');
-    try {
-      var seen = false;
-      try{ seen = sessionStorage.getItem('gacis_modal_seen') === '1'; }catch(e){ seen = false; }
-      function showModal(){ if(!modal) return; modal.style.display = 'flex'; try{ var f = modal.querySelector('button, [href], input, [tabindex]:not([tabindex="-1"])'); if(f && f.focus) f.focus({preventScroll:true}); }catch(e){} try{ sessionStorage.setItem('gacis_modal_seen','1'); }catch(e){} }
-      function closeModal(){ if(!modal) return; modal.style.display = 'none'; }
-      if(!seen) setTimeout(showModal, 300);
-      if(ack) ack.addEventListener('click', closeModal);
     } catch(e){}
 
     // --- Mobile nav elements & state ---
