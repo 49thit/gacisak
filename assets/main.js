@@ -64,9 +64,9 @@
     var mToggle = qs('.mobile-nav-toggle');                       // the hamburger toggle in header
     var mPanel = qs('#mobile-nav-panel');                        // aside container
     var mBody = qs('.mnp-body', mPanel);                         // where lists are rendered
-    var mSearch = qs('.mnp-search', mPanel);
     var mClose = qs('.mnp-close', mPanel);
     var mBack = qs('.mnp-back', mPanel);
+    var mTitle = qs('#mnp-title', mPanel);
     var mBackdrop = qs('.mnp-backdrop', mPanel);
 
     // Safety: if elements missing, do nothing
@@ -87,12 +87,10 @@
 
     // Parsed IA model (built lazily on first open)
     var IA = null; // { tiles: [{ title, columns: [{ title, boxes:[{title,pages:[{title,el}] }] }] }] }
-    var flatPages = []; // {title, tileIndex, colIndex, boxIndex, pageIndex, el}
 
     function buildIA() {
       if (IA) return IA;
       IA = { tiles: [] };
-      flatPages = [];
       var navItems = qsa('.nav-item');
       navItems.forEach(function (item, tileIndex) {
         var titleEl = qs('.nav-tile', item);
@@ -111,7 +109,6 @@
               qsa('.mega-page', tierEl).forEach(function (pageEl, pageIndex) {
                 var pageTitle = pageEl.textContent.trim() || pageEl.getAttribute('aria-label') || ('Page ' + pageIndex);
                 pages.push({ title: pageTitle, el: pageEl.cloneNode(true) }); // clone to avoid moving DOM
-                flatPages.push({ title: pageTitle, tileIndex: tileIndex, colIndex: colIndex, boxIndex: boxIndex, pageIndex: pageIndex });
               });
               boxes.push({ title: boxTitle, pages: pages });
             });
@@ -121,7 +118,7 @@
         IA.tiles.push({ title: tileTitle, columns: columns });
       });
       try {
-        console.debug && console.debug('[MNP] buildIA complete - tiles:', IA.tiles.length, 'flatPages:', flatPages.length);
+        console.debug && console.debug('[MNP] buildIA complete - tiles:', IA.tiles.length);
       } catch (e) {}
       return IA;
     }
@@ -170,6 +167,10 @@
 
     function clearBody() { mBody.innerHTML = ''; }
 
+    function setPanelTitle(text) {
+      if (mTitle) mTitle.textContent = text || 'Navigation';
+    }
+
     function renderTiles() {
       clearBody();
       var ul = el('ul', { class: 'mnp-list mnp-level-tiles' });
@@ -177,21 +178,18 @@
         var btn = el('button', { class: 'mnp-item mnp-tile', type: 'button', 'data-index': String(i), 'aria-label': tile.title });
         btn.innerHTML = '<span class="mnp-item-title"></span><span class="mnp-item-chevron" aria-hidden="true">›</span>';
         btn.querySelector('.mnp-item-title').textContent = tile.title;
-        var titleSpan = btn.querySelector('.mnp-item-title');
-        if (titleSpan) {
-          titleSpan.addEventListener('click', function (evt) {
-            try { evt && evt.preventDefault && evt.preventDefault(); evt && evt.stopPropagation && evt.stopPropagation(); } catch(e){}
-            push({ level: 'tile', index: i });
-          });
-        }
-        // Tapping anywhere else in the row closes the panel (per requirement)
-        btn.addEventListener('click', function () { closePanel(); });
+        btn.addEventListener('click', function (evt) {
+          evt && evt.preventDefault && evt.preventDefault();
+          evt && evt.stopPropagation && evt.stopPropagation();
+          push({ level: 'tile', index: i });
+        });
         var li = el('li', {}, [btn]);
         ul.appendChild(li);
       });
       mBody.appendChild(ul);
       setBackVisible(false);
       mBody.setAttribute('data-level', 'tiles');
+      setPanelTitle('Navigation');
       announce('Top-level navigation. ' + IA.tiles.length + ' categories.');
     }
 
@@ -203,20 +201,17 @@
         var btn = el('button', { class: 'mnp-item mnp-col', type: 'button', 'data-index': String(ci), 'aria-label': col.title });
         btn.innerHTML = '<span class="mnp-item-title"></span><span class="mnp-item-chevron" aria-hidden="true">›</span>';
         btn.querySelector('.mnp-item-title').textContent = col.title;
-        var colTitleSpan = btn.querySelector('.mnp-item-title');
-        if (colTitleSpan) {
-          colTitleSpan.addEventListener('click', function (evt) {
-            try { evt && evt.preventDefault && evt.preventDefault(); evt && evt.stopPropagation && evt.stopPropagation(); } catch(e){}
-            push({ level: 'col', index: ci });
-          });
-        }
-        // Tapping non-word space closes
-        btn.addEventListener('click', function () { closePanel(); });
+        btn.addEventListener('click', function (evt) {
+          evt && evt.preventDefault && evt.preventDefault();
+          evt && evt.stopPropagation && evt.stopPropagation();
+          push({ level: 'col', index: ci });
+        });
         ul.appendChild(el('li', {}, [btn]));
       });
       mBody.appendChild(ul);
       setBackVisible(true);
       mBody.setAttribute('data-level', 'columns');
+      setPanelTitle(tile.title);
       announce(tile.title + '. ' + tile.columns.length + ' groups.');
     }
 
@@ -228,26 +223,24 @@
         var btn = el('button', { class: 'mnp-item mnp-box', type: 'button', 'data-index': String(bi), 'aria-label': box.title });
         btn.innerHTML = '<span class="mnp-item-title"></span><span class="mnp-item-chevron" aria-hidden="true">›</span>';
         btn.querySelector('.mnp-item-title').textContent = box.title;
-        var boxTitleSpan = btn.querySelector('.mnp-item-title');
-        if (boxTitleSpan) {
-          boxTitleSpan.addEventListener('click', function (evt) {
-            try { evt && evt.preventDefault && evt.preventDefault(); evt && evt.stopPropagation && evt.stopPropagation(); } catch(e){}
-            push({ level: 'box', index: bi });
-          });
-        }
-        // Tapping non-word space closes
-        btn.addEventListener('click', function () { closePanel(); });
+        btn.addEventListener('click', function (evt) {
+          evt && evt.preventDefault && evt.preventDefault();
+          evt && evt.stopPropagation && evt.stopPropagation();
+          push({ level: 'box', index: bi });
+        });
         ul.appendChild(el('li', {}, [btn]));
       });
       mBody.appendChild(ul);
       setBackVisible(true);
       mBody.setAttribute('data-level', 'boxes');
+      setPanelTitle(col.title);
       announce(col.title + '. ' + col.boxes.length + ' sections.');
     }
 
     function renderPages(tileIndex, colIndex, boxIndex) {
       clearBody();
       var pages = IA.tiles[tileIndex].columns[colIndex].boxes[boxIndex].pages;
+      var boxTitle = IA.tiles[tileIndex].columns[colIndex].boxes[boxIndex].title;
       var ul = el('ul', { class: 'mnp-list mnp-level-pages' });
       pages.forEach(function (pageObj, pi) {
         // pageObj.el is a cloned anchor node; replace href handling: keep it inert per site policy
@@ -263,6 +256,7 @@
       mBody.appendChild(ul);
       setBackVisible(true);
       mBody.setAttribute('data-level', 'pages');
+      setPanelTitle(boxTitle);
       announce('Pages. ' + pages.length + ' items.');
     }
 
@@ -338,62 +332,6 @@
       renderPages(t,c,b); savePath();
     }
 
-    // --- search indexing + renderer ---
-    function buildFlatIndex() {
-      flatPages = [];
-      IA.tiles.forEach(function (tile, ti) {
-        tile.columns.forEach(function (col, ci) {
-          col.boxes.forEach(function (box, bi) {
-            box.pages.forEach(function (page, pi) {
-              flatPages.push({
-                title: page.title,
-                breadcrumb: [tile.title, col.title, box.title, page.title],
-                tileIndex: ti, colIndex: ci, boxIndex: bi, pageIndex: pi
-              });
-            });
-          });
-        });
-      });
-    }
-
-    var searchResultsEl = null;
-    function renderSearchResults(matches) {
-      // show flat list
-      if (!searchResultsEl) {
-        searchResultsEl = el('div', { class: 'mnp-search-results' });
-        mBody.parentNode.insertBefore(searchResultsEl, mBody.nextSibling);
-      }
-      searchResultsEl.innerHTML = '';
-      if (!matches || matches.length === 0) {
-        searchResultsEl.innerHTML = '<div class="mnp-no-results">No results</div>';
-        return;
-      }
-      var ul = el('ul', { class: 'mnp-search-list' });
-      matches.forEach(function (m) {
-        var btn = el('button', { class: 'mnp-search-item', type: 'button', 'data-tile': m.tileIndex, 'data-col': m.colIndex, 'data-box': m.boxIndex });
-        var crumb = m.breadcrumb.slice(0,3).join(' › ');
-        btn.innerHTML = '<div class="mnp-search-title"></div><div class="mnp-search-crumb"></div>';
-        btn.querySelector('.mnp-search-title').textContent = m.title;
-        btn.querySelector('.mnp-search-crumb').textContent = crumb;
-        btn.addEventListener('click', function () {
-          // jump into containing path and show pages, highlight selected page
-          jumpToPath([m.tileIndex, m.colIndex, m.boxIndex]);
-        });
-        ul.appendChild(el('li', {}, [btn]));
-      });
-      searchResultsEl.appendChild(ul);
-    }
-
-    function searchIndex(q) {
-      var term = (q || '').trim().toLowerCase();
-      if (!term) return [];
-      var parts = term.split(/\s+/).filter(Boolean);
-      return flatPages.filter(function (p) {
-        var txt = p.title.toLowerCase() + ' ' + (p.breadcrumb ? p.breadcrumb.join(' ').toLowerCase() : '');
-        return parts.every(function (pt) { return txt.indexOf(pt) !== -1; });
-      }).slice(0, 50);
-    }
-
     // --- focus trap & open/close behavior ---
     var previouslyFocused = null;
     var keydownHandler = null;
@@ -439,7 +377,6 @@
     function openPanel() {
       console.debug && console.debug('[MNP] openPanel()');
       buildIA();
-      buildFlatIndex();
       // Remove pre-hide style if present (inserted in head) so transitions can work
       try {
         var pre = document.getElementById('mnp-prehide');
@@ -503,8 +440,7 @@
           // - the word label itself (.mnp-item-title)
           // - the back button (.mnp-back)
           // - page links (.mnp-page-link)
-          // - search input (.mnp-search)
-          var allowedTarget = evt.target && (evt.target.closest('.mnp-item-title') || evt.target.closest('.mnp-back') || evt.target.closest('.mnp-page-link') || evt.target.closest('.mnp-search'));
+          var allowedTarget = evt.target && (evt.target.closest('.mnp-item') || evt.target.closest('.mnp-item-title') || evt.target.closest('.mnp-item-chevron') || evt.target.closest('.mnp-back') || evt.target.closest('.mnp-page-link'));
           if (!inside || (!allowedTarget)) {
             // Clicked outside the sheet OR inside sheet but not on a word/back/search → close panel
             closePanel();
@@ -531,29 +467,6 @@
       }
       lastIsMobile = nowMobile;
     }, { passive: true });
-
-    // search handling
-    if (mSearch) {
-      var searchTimer = null;
-      mSearch.addEventListener('input', function (e) {
-        var q = mSearch.value || '';
-        if (searchTimer) clearTimeout(searchTimer);
-        searchTimer = setTimeout(function () {
-          if (!IA) buildIA(), buildFlatIndex();
-          if (!q) {
-            if (searchResultsEl) searchResultsEl.innerHTML = '';
-            // re-render current level
-            if (stack.length === 0) renderTiles();
-            else if (stack.length === 1) renderColumns(stack[0].index);
-            else if (stack.length === 2) renderBoxes(stack[0].index, stack[1].index);
-            else if (stack.length === 3) renderPages(stack[0].index, stack[1].index, stack[2].index);
-            return;
-          }
-          var matches = searchIndex(q);
-          renderSearchResults(matches);
-        }, 150);
-      });
-    }
 
     // initial state: ensure panel hidden (keeps graceful if JS absent)
     hide(mPanel);
