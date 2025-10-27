@@ -1,0 +1,1675 @@
+<!doctype html>
+<!--
+  GACIS — Global Alaska Communications & Information Services
+  Single-file production-ready homepage for GitHub Pages (no build).
+  Tone: serious, concise, enterprise. Comments: dry, bureaucratic, mildly sarcastic.
+  QA Checklist (embedded as requested):
+  - [x] Single self-contained HTML with inline CSS and minimal vanilla JS
+  - [x] No external JS/CSS; only remote stock images (Unsplash) permitted
+  - [x] All nav items & CTAs are non-navigating (href="#" + aria-disabled="true" + JS prevents default)
+  - [x] Responsive, semantic HTML; logical heading order
+  - [x] Images use width/height, loading="lazy", decoding="async"
+  - [x] Prefers-reduced-motion respected
+  - [x] Sticky header, 1200px container, midnight tiles, gloss hover states
+  - [x] Inline SVG logo and stylized Alaska map included
+  - [x] Modal auto-opens on first load (JS); degrades gracefully if JS blocked
+  - [x] Accessibility basics: skip link, focus-visible, ARIA roles, live status bar
+  - [x] SEO/meta/Open Graph/Twitter/JSON-LD included
+-->
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <title>GACIS — The backbone of Alaska’s digital infrastructure</title>
+  <meta name="description" content="GACIS provides ISP, cloud, security, and managed IT across Alaska. Scheduled upgrade in progress; connectivity and core network remain fully operational.">
+  <meta name="theme-color" content="#0B203A">
+
+  <!-- Open Graph / Twitter -->
+  <meta property="og:title" content="GACIS — The backbone of Alaska’s digital infrastructure">
+  <meta property="og:description" content="Scheduled upgrade in progress. Some online services temporarily unavailable. Connectivity and core network remain fully operational.">
+  <meta property="og:image" content="https://images.unsplash.com/photo-1441974231531-c6227db76b6e?auto=format&fit=crop&w=1600&q=80">
+  <meta name="twitter:card" content="summary_large_image">
+
+  <!-- JSON-LD Organization -->
+  <script type="application/ld+json">
+  {
+    "@context":"https://schema.org",
+    "@type":"Organization",
+    "name":"GACIS (Global Alaska Communications & Information Services)",
+    "url":"https://gacisak.github.io/",
+    "sameAs":["https://www.linkedin.com/company/gacis-alaska"],
+    "address":{"@type":"PostalAddress","streetAddress":"100 Marine Way","addressLocality":"Juneau","addressRegion":"AK","postalCode":"99801","addressCountry":"US"}
+  }
+  </script>
+
+  <style>
+    /* Design tokens & palette */
+    :root{
+      --navy:#0B203A;
+      --glacier:#5FB3E3;
+      --aurora:#2BB673;
+      --snow:#F6F9FC;
+      --gold:#BE9B28;
+      --slate:#6B7A90;
+      --container:1200px;
+      --radius:0px;
+      --shadow:0 8px 28px rgba(11,32,58,.08);
+      --muted:rgba(107,122,144,.9);
+      --midnight:#010B2B;
+      --midnight-gloss:#04133C;
+      --midnight-ink:#00040F;
+      --gold-subdued:#C39A34;
+      --gold-hot:#FFE28A;
+      --crimson:#D22630;
+      --teal:#00A3AD;
+      --amber:#C69214;
+    }
+
+    /* Minimal reset */
+    *,*::before,*::after{box-sizing:border-box}
+    html{font-family:-apple-system, "Segoe UI", Roboto, Inter, Arial, sans-serif;font-size:16px;line-height:1.45;color:var(--navy);-webkit-font-smoothing:antialiased}
+    body{margin:0;background:var(--midnight-ink);color:var(--gold-subdued)}
+    h1,h2,h3,h4,h5{color:var(--gold-hot);font-weight:700}
+    img{display:block;max-width:100%;height:auto}
+    a{color:var(--gold-subdued);text-decoration:none;transition:color .2s ease}
+    a:hover{color:var(--gold-hot)}
+    button{font:inherit}
+    :focus{outline:none}
+    :focus-visible{outline:3px solid var(--glacier);outline-offset:3px;border-radius:0}
+
+    .container{max-width:var(--container);margin:0 auto;padding:0 20px}
+    .stack{display:grid;gap:20px}
+    .row{display:flex;gap:16px;align-items:center}
+    .visually-hidden{position:absolute!important;height:1px;width:1px;overflow:hidden;clip:rect(1px,1px,1px,1px);white-space:nowrap;border:0;padding:0;margin:-1px}
+
+    /* Top status bar */
+    .status-bar{background:linear-gradient(90deg,var(--crimson),var(--teal));color:#fbf4ec;font-size:.9rem;box-shadow:0 6px 16px rgba(0,0,0,.6)}
+    .status-row{display:flex;justify-content:space-between;align-items:center;padding:8px 0}
+    .status-row a{color:#fdfdfd}
+    .status-row .msg{max-width:75ch}
+
+    /* Header: midnight glossy corridor */
+    header.site-header{
+      position:sticky;
+      top:0;
+      z-index:80;
+      background:linear-gradient(135deg,#010814 0%,#041432 50%,#071d48 100%);
+      border-bottom:1px solid rgba(0,0,0,.75);
+      box-shadow:0 14px 32px rgba(0,0,0,.55),inset 0 1px 0 rgba(255,255,255,.08);
+    }
+    .header-inner{
+      display:grid;
+      grid-template-columns:auto 1fr auto;
+      align-items:stretch;
+      gap:16px;
+      padding:0;
+      min-height:78px;
+    }
+    .brand{
+      display:flex;
+      align-items:center;
+      padding:12px 0;
+      color:var(--gold-hot);
+    }
+    .brand svg{display:block}
+    .brand text{fill:var(--gold-hot)}
+
+    .midnight-nav{
+      display:flex;
+      align-items:stretch;
+      justify-content:center;
+    }
+    .nav-tiles{
+      list-style:none;
+      margin:0;
+      padding:0;
+      display:flex;
+      gap:0;
+      align-items:stretch;
+      border:1px solid rgba(0,0,0,.85);
+      border-top:none;
+      border-bottom:none;
+      box-shadow:inset 0 1px 0 rgba(255,255,255,.05);
+    }
+    .nav-item{
+      position:relative;
+      flex:1 1 0;
+      min-width:120px;
+    }
+    .nav-tile{
+      width:100%;
+      height:100%;
+      padding:18px 22px;
+      background:linear-gradient(180deg,#050f2f 0%,#010616 85%,#00030b 100%);
+      border:none;
+      border-left:1px solid rgba(0,0,0,.9);
+      border-right:1px solid rgba(15,21,45,.9);
+      color:var(--gold-subdued);
+      text-transform:uppercase;
+      letter-spacing:.08em;
+      font-weight:700;
+      font-size:.85rem;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      cursor:default;
+      transition:color .18s ease,box-shadow .18s ease,background .18s ease;
+      box-shadow:inset 0 -18px 28px rgba(0,0,0,.45);
+    }
+    .nav-item:first-child .nav-tile{border-left:none}
+    .nav-item:last-child .nav-tile{border-right:none}
+    .nav-tile:focus-visible{outline:3px solid var(--glacier);outline-offset:-3px}
+    .nav-tile:hover,
+    .nav-item:hover>.nav-tile,
+    .nav-item:focus-within>.nav-tile{
+      color:var(--gold-hot);
+      background:linear-gradient(180deg,rgba(0,163,173,.4) 0%,rgba(7,19,57,.95) 70%,#040b21 100%);
+      box-shadow:inset 0 0 24px rgba(255,226,138,.18);
+    }
+
+    .mega-panel{
+      position:absolute;
+      left:50%;
+      top:100%;
+      transform:translateX(-50%);
+      width:min(calc(var(--container) + 40px),100vw);
+      max-width:calc(var(--container) + 40px);
+      padding:28px 24px 32px;
+      background:linear-gradient(180deg,#020713 0%,#01030b 100%);
+      border:1px solid rgba(0,0,0,.9);
+      border-top:none;
+      box-shadow:0 30px 60px rgba(0,0,0,.85),inset 0 0 28px rgba(255,226,138,.08);
+      display:none;
+      z-index:70;
+    }
+    .nav-item:hover .mega-panel,
+    .nav-item:focus-within .mega-panel{display:block}
+    .mega-grid{
+      display:grid;
+      grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+      gap:20px;
+      max-height:65vh;
+      overflow:auto;
+      padding-right:8px;
+    }
+    .mega-col{display:flex;flex-direction:column;gap:12px}
+    .mega-col h4{
+      margin:0;
+      font-size:.8rem;
+      letter-spacing:.32em;
+      text-transform:uppercase;
+      color:rgba(255,226,138,.8);
+    }
+    .mega-links{display:flex;flex-direction:column;gap:12px}
+    .mega-tier{
+      background:linear-gradient(150deg,rgba(210,38,48,.18) 0%,rgba(0,163,173,.08) 40%,#010713 100%);
+      border:1px solid rgba(0,0,0,.85);
+      border-top:1px solid rgba(210,38,48,.45);
+      box-shadow:0 10px 26px rgba(0,0,0,.6),inset 0 0 14px rgba(255,255,255,.05);
+      padding:12px;
+      transition:box-shadow .18s ease,transform .18s ease,color .18s ease;
+    }
+    .mega-tier:hover{
+      box-shadow:inset 0 0 22px rgba(255,226,138,.18);
+      transform:translateY(-2px);
+    }
+    .mega-tier h5{
+      margin:0 0 6px;
+      font-size:.7rem;
+      letter-spacing:.2em;
+      text-transform:uppercase;
+      color:var(--teal);
+    }
+    .mega-pages{
+      display:grid;
+      gap:6px;
+    }
+    .mega-page{
+      display:block;
+      font-size:.68rem;
+      letter-spacing:.05em;
+      color:var(--gold-subdued);
+      padding:8px 10px;
+      border:1px solid rgba(0,0,0,.85);
+      background:linear-gradient(180deg,#040b1f 0%,#010308 95%);
+      text-transform:none;
+      transition:color .18s ease,box-shadow .18s ease,transform .18s ease;
+    }
+    .mega-page:hover{
+      color:var(--amber);
+      box-shadow:inset 0 0 18px rgba(255,226,138,.18);
+      transform:translateY(-1px);
+      text-decoration:none;
+    }
+
+    .header-right{display:flex;gap:14px;align-items:center}
+    .ai-chat{
+      display:inline-flex;
+      align-items:center;
+      gap:10px;
+      padding:16px 20px;
+      background:linear-gradient(135deg,var(--crimson),var(--teal));
+      border:1px solid rgba(0,0,0,.9);
+      color:#fff;
+      font-weight:700;
+      letter-spacing:.08em;
+      text-transform:uppercase;
+      box-shadow:0 6px 20px rgba(0,0,0,.55),inset 0 0 12px rgba(255,255,255,.1);
+      cursor:default;
+    }
+    .ai-chat:hover,.ai-chat:focus-visible{
+      box-shadow:inset 0 0 20px rgba(255,255,255,.18);
+    }
+    .ai-chat svg{flex-shrink:0}
+    .mobile-menu-toggle{display:none}
+
+    /* Buttons */
+    .btn{
+      padding:12px 20px;
+      border-radius:0;
+      border:1px solid rgba(0,0,0,.9);
+      background:linear-gradient(165deg,#040d29 0%,#050b1f 80%);
+      font-weight:700;
+      letter-spacing:.08em;
+      color:var(--gold-subdued);
+      text-transform:uppercase;
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      gap:8px;
+      cursor:default;
+      box-shadow:0 10px 24px rgba(0,0,0,.6),inset 0 0 16px rgba(255,255,255,.05);
+      transition:color .2s ease,background .2s ease,box-shadow .2s ease,transform .15s ease;
+    }
+    .btn--primary{background:linear-gradient(135deg,var(--crimson),var(--teal));color:#fff}
+    .btn:hover,
+    .btn:focus-visible{
+      color:var(--gold-hot);
+      background:linear-gradient(165deg,rgba(0,163,173,.4) 0%,#050f2f 75%,#010411 100%);
+      box-shadow:inset 0 0 24px rgba(255,226,138,.18);
+    }
+    .btn:active{transform:scale(.97)}
+    .btn[aria-disabled="true"]{opacity:1}
+
+    /* Hero */
+    .hero{position:relative;color:var(--gold-hot);overflow:hidden;border-bottom:1px solid rgba(0,0,0,.7);box-shadow:0 12px 32px rgba(0,0,0,.6)}
+    .hero::before{
+      content:"";position:absolute;inset:0;background:
+        linear-gradient(200deg, rgba(210,38,48,.7) 0%, rgba(0,163,173,.45) 50%, rgba(7,23,65,.6) 100%),
+        url("https://images.unsplash.com/photo-1441974231531-c6227db76b6e?auto=format&fit=crop&w=1600&q=80") center/cover no-repeat;
+      z-index:0;
+    }
+    .hero .hero-inner{position:relative;z-index:1;padding:64px 0 80px}
+    .hero h1{font-size:clamp(1.6rem,2.8vw,2.6rem);margin:0 0 8px}
+    .hero p{max-width:65ch;color:rgba(255,226,138,.9);margin:0 0 14px}
+    .hero-note{text-transform:uppercase;font-size:.9rem;letter-spacing:.12em;color:rgba(0,163,173,.85)}
+    .hero .actions{display:flex;gap:12px;flex-wrap:wrap}
+
+    /* Stats ribbon */
+    .ribbon{background:transparent;padding:18px 0}
+    .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+    .stat{
+      background:linear-gradient(170deg,rgba(0,163,173,.18) 0%,#010512 95%);
+      border-radius:0;
+      padding:20px;
+      box-shadow:0 15px 36px rgba(0,0,0,.6),inset 0 0 18px rgba(255,255,255,.05);
+      border:1px solid rgba(0,0,0,.85);
+      border-top:2px solid rgba(0,163,173,.45);
+      text-align:center;
+      color:var(--gold-subdued);
+      transition:box-shadow .2s ease,transform .2s ease,color .2s ease;
+    }
+    .stat strong{display:block;font-size:1.05rem;color:var(--amber);text-transform:uppercase;letter-spacing:.06em}
+    .stat span{color:var(--gold-subdued);font-size:.95rem}
+    .stat:hover{color:var(--gold-hot);box-shadow:inset 0 0 24px rgba(255,255,255,.12);transform:translateY(-3px)}
+
+    /* Cards & grids */
+    .grid{display:grid;gap:14px}
+    .support-tiles{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+    .cols-2{grid-template-columns:repeat(2,1fr)}
+    .cols-3{grid-template-columns:repeat(3,1fr)}
+    .cols-4{grid-template-columns:repeat(4,1fr)}
+    .card,
+    .press-card,
+    .tile{
+      background:linear-gradient(160deg,rgba(194,146,20,.12) 0%,#01040f 85%);
+      border-radius:0;
+      padding:18px;
+      border:1px solid rgba(0,0,0,.85);
+      box-shadow:0 15px 36px rgba(0,0,0,.6),inset 0 0 18px rgba(255,255,255,.05);
+      transition:box-shadow .2s ease,transform .2s ease,color .2s ease;
+      color:var(--gold-subdued);
+    }
+    .card:hover,
+    .press-card:hover,
+    .tile:hover{box-shadow:inset 0 0 24px rgba(255,255,255,.12);transform:translateY(-3px);color:var(--gold-hot)}
+    .eyebrow{font-size:.75rem;color:var(--amber);text-transform:uppercase;letter-spacing:.2em}
+    .card a,
+    .tile a{color:var(--teal);text-transform:uppercase;font-weight:700;letter-spacing:.08em}
+    .card a:hover,
+    .tile a:hover{text-decoration:underline}
+    .press-card time{font-size:.75rem;letter-spacing:.3em;text-transform:uppercase;color:var(--teal)}
+    .press-card h3{margin:10px 0;color:var(--gold-hot)}
+    .press-card h3 a{color:var(--amber)}
+    .press-card p{margin:0;color:var(--gold-subdued)}
+    .press-card h3 a:hover{text-decoration:underline}
+
+    /* Industries scroller */
+    .industries{display:grid;grid-auto-flow:column;grid-auto-columns:minmax(240px,1fr);gap:12px;overflow-x:auto;padding:8px 0;scroll-snap-type:x mandatory}
+    .industry{
+      position:relative;
+      border-radius:0;
+      overflow:hidden;
+      min-height:180px;
+      box-shadow:0 15px 40px rgba(0,0,0,.65);
+      scroll-snap-align:start;
+      border:1px solid rgba(0,0,0,.9);
+      transition:transform .2s ease,box-shadow .2s ease;
+    }
+    .industry:hover{transform:translateY(-4px);box-shadow:0 0 32px rgba(255,226,138,.25)}
+    .industry img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+    .industry .overlay{position:absolute;inset:0;background:linear-gradient(200deg, rgba(210,38,48,.45) 0%, rgba(0,163,173,.25) 50%, rgba(7,23,65,.85) 100%);transition:background .2s ease}
+    .industry:hover .overlay{background:linear-gradient(200deg, rgba(198,146,20,.4) 0%, rgba(5,12,32,.85) 100%)}
+    .industry .content{position:relative;padding:16px;color:var(--amber)}
+
+    /* Coverage & map */
+    .coverage{display:grid;grid-template-columns:1.25fr .75fr;gap:18px;align-items:start}
+    .map,
+    .security,
+    .logo-tile{
+      background:linear-gradient(165deg,#040b1f 0%,#010614 90%);
+      border-radius:0;
+      padding:16px;
+      border:1px solid rgba(0,0,0,.85);
+      box-shadow:0 15px 36px rgba(0,0,0,.6),inset 0 0 18px rgba(255,255,255,.05);
+      color:var(--gold-subdued);
+      transition:box-shadow .2s ease,transform .2s ease,color .2s ease;
+    }
+    .map:hover,.security:hover,.logo-tile:hover{box-shadow:inset 0 0 24px rgba(255,255,255,.12);transform:translateY(-3px);color:var(--gold-hot)}
+    .legend{display:flex;flex-wrap:wrap;gap:8px;font-size:.9rem;color:var(--gold-subdued)}
+
+    /* Security section */
+    .security{display:grid;grid-template-columns:1fr 160px;gap:18px;align-items:center}
+
+    /* Logos grid */
+    .logos{display:grid;grid-template-columns:repeat(6,1fr);gap:12px}
+    .logo-tile{justify-content:center;text-transform:uppercase;letter-spacing:.08em}
+    .upgrade-banner{
+      margin-top:18px;
+      padding:18px;
+      background:linear-gradient(165deg,rgba(210,38,48,.35) 0%,rgba(198,146,20,.28) 60%,#010100 100%);
+      border:1px solid rgba(0,0,0,.85);
+      box-shadow:0 15px 36px rgba(0,0,0,.6),inset 0 0 18px rgba(255,255,255,.05);
+      color:var(--gold-hot);
+      letter-spacing:.08em;
+      text-transform:uppercase;
+      transition:box-shadow .2s ease,transform .2s ease;
+    }
+    .upgrade-banner:hover{box-shadow:inset 0 0 24px rgba(255,255,255,.12);transform:translateY(-3px)}
+
+    /* Footer */
+    footer{
+      background:linear-gradient(180deg,#030814 0%,#01040f 100%);
+      color:var(--gold-subdued);
+      padding:22px 0 40px;
+      border-top:1px solid rgba(0,0,0,.8);
+      box-shadow:0 -10px 28px rgba(0,0,0,.8);
+    }
+    .footer-grid{display:grid;grid-template-columns:1fr .6fr;gap:18px}
+    footer a{color:var(--gold-subdued)}
+    .footer-note{text-align:center;padding:18px 0;color:var(--gold-subdued);letter-spacing:.08em;text-transform:uppercase}
+
+    /* Modal */
+    .modal-backdrop{position:fixed;inset:0;display:none;align-items:center;justify-content:center;background:rgba(11,32,58,.6);z-index:80;padding:18px}
+    .modal{
+      background:linear-gradient(160deg,#050f2f 0%,#010614 90%);
+      border-radius:0;
+      max-width:560px;
+      width:100%;
+      box-shadow:0 30px 60px rgba(0,0,0,.75),inset 0 0 24px rgba(255,255,255,.08);
+      border:1px solid rgba(0,0,0,.85);
+      color:var(--gold-hot);
+    }
+    .modal header{padding:18px;border-bottom:1px solid rgba(255,255,255,.08)}
+    .modal .body{padding:16px;color:var(--gold-subdued)}
+    .modal .actions{padding:12px 16px;display:flex;justify-content:flex-end}
+
+    /* Accessibility: prefers reduced motion */
+    @media (prefers-reduced-motion: reduce){
+      *{animation:none!important;transition:none!important}
+    }
+
+    /* Responsive adjustments */
+    @media (max-width:1000px){
+      .cols-4{grid-template-columns:repeat(2,1fr)}
+      .cols-3{grid-template-columns:repeat(2,1fr)}
+      .stats{grid-template-columns:repeat(2,1fr)}
+      .coverage{grid-template-columns:1fr}
+      .security{grid-template-columns:1fr}
+      .logos{grid-template-columns:repeat(3,1fr)}
+      .nav-tiles{flex-wrap:wrap}
+      .nav-item{flex:1 1 45%;min-width:160px}
+      .mega-grid{grid-template-columns:repeat(4,minmax(180px,1fr))}
+    }
+    @media (max-width:720px){
+      .header-inner{grid-template-columns:1fr;gap:12px;padding:12px 0}
+      .midnight-nav{order:3}
+      .header-right{justify-content:flex-end}
+      .nav-tiles{flex-wrap:nowrap;overflow-x:auto}
+      .nav-item{flex:0 0 auto;min-width:150px}
+      .support-tiles{grid-template-columns:1fr}
+      .mega-grid{grid-template-columns:repeat(2,minmax(180px,1fr))}
+    }
+    @media (max-width:640px){
+      .cols-2,.cols-3,.cols-4{grid-template-columns:1fr}
+      .nav-tiles{border-left:none;border-right:none}
+      .nav-item{min-width:140px}
+      .mega-grid{grid-template-columns:1fr}
+    }
+
+  </style>
+</head>
+<body>
+  <a class="visually-hidden" href="#main">Skip to main content</a>
+
+  <!-- Top Status Bar -->
+  <div class="status-bar" role="status" aria-live="polite">
+    <div class="container status-row">
+      <div class="msg">Scheduled upgrade in progress. Some online services are temporarily unavailable. Connectivity and core network remain fully operational.</div>
+      <a href="#" aria-disabled="true" tabindex="0">Service Status</a>
+    </div>
+  </div>
+
+  <!-- Header / Global Nav -->
+  <header class="site-header" role="banner" aria-label="Global header">
+    <div class="container header-inner">
+      <div class="brand" aria-label="GACIS logo">
+        <svg width="180" height="56" viewBox="0 0 360 120" role="img" aria-labelledby="gacisTitle" focusable="false" preserveAspectRatio="xMinYMid meet">
+          <title id="gacisTitle">GACIS wordmark</title>
+          <text x="0" y="78" font-family="-apple-system, 'Segoe UI', Roboto, Inter, Arial, sans-serif" font-size="78" font-weight="700" fill="currentColor">GACIS</text>
+          <rect x="270" y="28" width="24" height="24" fill="#D22630"/>
+          <rect x="302" y="28" width="24" height="24" fill="#00A3AD"/>
+          <rect x="334" y="28" width="24" height="8" fill="#C69214"/>
+        </svg>
+      </div>
+
+      <nav class="midnight-nav" aria-label="Primary navigation">
+        <ul class="nav-tiles" role="menubar">
+          <!-- Public Sector -->
+          <li class="nav-item" role="none">
+            <button type="button" class="nav-tile" role="menuitem" aria-haspopup="true" aria-expanded="false" aria-disabled="true">Public Sector</button>
+            <div class="mega-panel" role="menu" aria-label="Public sector command stack">
+              <div class="mega-grid">
+                <section class="mega-col">
+                  <h4>Alaska Legislature</h4>
+                  <div class="mega-links">
+                    <div class="mega-tier">
+                      <h5>House Operations</h5>
+                      <div class="mega-pages">
+                        <a href="#" class="mega-page" aria-disabled="true">Floor Connectivity Oversight</a>
+                        <a href="#" class="mega-page" aria-disabled="true">Caucus Collaboration Pods</a>
+                        <a href="#" class="mega-page" aria-disabled="true">Journal Digitization Vault</a>
+                        <a href="#" class="mega-page" aria-disabled="true">Remote Testimony Bureau</a>
+                      </div>
+                    </div>
+                    <div class="mega-tier">
+                      <h5>Senate Operations</h5>
+                      <div class="mega-pages">
+                        <a href="#" class="mega-page" aria-disabled="true">Committee Streaming SLA Desk</a>
+                        <a href="#" class="mega-page" aria-disabled="true">Joint Session Signal Plans</a>
+                        <a href="#" class="mega-page" aria-disabled="true">Vote Audit Fiber Mirror</a>
+                        <a href="#" class="mega-page" aria-disabled="true">Capitol Redundancy Taskforce</a>
+                      </div>
+                    </div>
+                    <div class="mega-tier">
+                      <h5>Legislative Services</h5>
+                      <div class="mega-pages">
+                        <a href="#" class="mega-page" aria-disabled="true">Legislative Press Grid Access</a>
+                        <a href="#" class="mega-page" aria-disabled="true">Interpreter &amp; Captioning Roster</a>
+                        <a href="#" class="mega-page" aria-disabled="true">Civic Education Outreach Desk</a>
+                        <a href="#" class="mega-page" aria-disabled="true">Modernization Steering Office</a>
+                      </div>
+                    </div>
+                  </div>
+                </section>
+                <section class="mega-col">
+                  <h4>State Agencies</h4>
+                  <div class="mega-links">
+                    <div class="mega-tier">
+                      <h5>Resource Stewardship</h5>
+                      <div class="mega-pages">
+                        <a href="#" class="mega-page" aria-disabled="true">Natural Resources WAN Custodians</a>
+                        <a href="#" class="mega-page" aria-disabled="true">Environmental Monitoring Telemetry</a>
+                        <a href="#" class="mega-page" aria-disabled="true">Wildlife Licensing Cloud</a>
+                        <a href="#" class="mega-page" aria-disabled="true">Subsistence Mapping Portal</a>
+                      </div>
+                    </div>
+                    <div class="mega-tier">
+                      <h5>Health Services</h5>
+                      <div class="mega-pages">
+                        <a href="#" class="mega-page" aria-disabled="true">Health &amp; Human Services Records Mesh</a>
+                        <a href="#" class="mega-page" aria-disabled="true">Public Health Telemetry Pods</a>
+                        <a href="#" class="mega-page" aria-disabled="true">Emergency Credential Issuance</a>
+                        <a href="#" class="mega-page" aria-disabled="true">Clinician Support Escalations</a>
+                      </div>
+                    </div>
+                    <div class="mega-tier">
+                      <h5>Transport &amp; Safety</h5>
+                      <div class="mega-pages">
+                        <a href="#" class="mega-page" aria-disabled="true">Transportation Signal Modernization</a>
+                        <a href="#" class="mega-page" aria-disabled="true">Corrections Secure Intake Links</a>
+                        <a href="#" class="mega-page" aria-disabled="true">Public Safety Backhaul Council</a>
+                        <a href="#" class="mega-page" aria-disabled="true">Revenue Datacenter Stewardship</a>
+                      </div>
+                    </div>
+                  </div>
+                </section>
+                <section class="mega-col">
+                  <h4>Municipal Coalitions</h4>
+                  <div class="mega-links">
+                    <div class="mega-tier">
+                      <h5>Metro Alliances</h5>
+                      <div class="mega-pages">
+                        <a href="#" class="mega-page" aria-disabled="true">Anchorage Civic Net Renewal</a>
+                        <a href="#" class="mega-page" aria-disabled="true">Fairbanks Borough Continuity Lab</a>
+                        <a href="#" class="mega-page" aria-disabled="true">Mat-Su Public Safety Backhaul</a>
+                        <a href="#" class="mega-page" aria-disabled="true">Southeast Regional Franchise Office</a>
+                      </div>
+                    </div>
+                    <div class="mega-tier">
+                      <h5>Borough Continuity</h5>
+                      <div class="mega-pages">
+                        <a href="#" class="mega-page" aria-disabled="true">Arctic Borough Telemetry Watch</a>
+                        <a href="#" class="mega-page" aria-disabled="true">City Clerk Archive Sync</a>
+                        <a href="#" class="mega-page" aria-disabled="true">Municipal Fleet Sensor Care</a>
+                        <a href="#" class="mega-page" aria-disabled="true">Continuity Tabletop Broadcasts</a>
+                      </div>
+                    </div>
+                    <div class="mega-tier">
+                      <h5>Utility Co-ops</h5>
+                      <div class="mega-pages">
+                        <a href="#" class="mega-page" aria-disabled="true">Rural Utility Redundancy Planners</a>
+                        <a href="#" class="mega-page" aria-disabled="true">Water Treatment Telemetry</a>
+                        <a href="#" class="mega-page" aria-disabled="true">Solid Waste IoT Monitoring</a>
+                        <a href="#" class="mega-page" aria-disabled="true">Emergency Fuel Visibility Desk</a>
+                      </div>
+                    </div>
+                  </div>
+                </section>
+                <section class="mega-col">
+                  <h4>Tribal &amp; Education</h4>
+                  <div class="mega-links">
+                    <div class="mega-tier">
+                      <h5>Tribal Councils</h5>
+                      <div class="mega-pages">
+                        <a href="#" class="mega-page" aria-disabled="true">Tribal Accord Fiber Initiative</a>
+                        <a href="#" class="mega-page" aria-disabled="true">Council Chambers Audio Fleet</a>
+                        <a href="#" class="mega-page" aria-disabled="true">Cultural Archive Redundancy</a>
+                        <a href="#" class="mega-page" aria-disabled="true">Tribal Liaison Escalation Loop</a>
+                      </div>
+                    </div>
+                    <div class="mega-tier">
+                      <h5>Village Programs</h5>
+                      <div class="mega-pages">
+                        <a href="#" class="mega-page" aria-disabled="true">Village Radio Integration Desk</a>
+                        <a href="#" class="mega-page" aria-disabled="true">Village Telehealth Drop Kits</a>
+                        <a href="#" class="mega-page" aria-disabled="true">Subsistence Logistics Tracker</a>
+                        <a href="#" class="mega-page" aria-disabled="true">Satellite Voucher Clearinghouse</a>
+                      </div>
+                    </div>
+                    <div class="mega-tier">
+                      <h5>Education Mandates</h5>
+                      <div class="mega-pages">
+                        <a href="#" class="mega-page" aria-disabled="true">School District Services PMO</a>
+                        <a href="#" class="mega-page" aria-disabled="true">Remote Classroom Sat Uplinks</a>
+                        <a href="#" class="mega-page" aria-disabled="true">Library Bandwidth Equalization</a>
+                        <a href="#" class="mega-page" aria-disabled="true">Superintendent Policy Hotline</a>
+                      </div>
+                    </div>
+                  </div>
+                </section>
+              </div>
+            </div>
+          </li>
+          <!-- Networks &amp; Spectrum -->
+          <li class="nav-item" role="none">
+            <button type="button" class="nav-tile" role="menuitem" aria-haspopup="true" aria-expanded="false" aria-disabled="true">Networks &amp; Spectrum</button>
+            <div class="mega-panel" role="menu" aria-label="Networks and spectrum catalog">
+              <div class="mega-grid">
+                <section class="mega-col">
+                  <h4>Internet &amp; Wireless</h4>
+                  <div class="mega-links">
+                    <div class="mega-tier">
+                      <h5>Metro Wireless</h5>
+                      <div class="mega-pages">
+                        <a href="#" class="mega-page" aria-disabled="true">Arctic POP Readiness Bureau</a>
+                        <a href="#" class="mega-page" aria-disabled="true">Metro 5G Beamforming Guild</a>
+                        <a href="#" class="mega-page" aria-disabled="true">Consumer Safeguard War Room</a>
+                        <a href="#" class="mega-page" aria-disabled="true">Peering Policy Signatory List</a>
+                      </div>
+                    </div>
+                    <div class="mega-tier">
+                      <h5>Enterprise Wi‑Fi</h5>
+                      <div class="mega-pages">
+                        <a href="#" class="mega-page" aria-disabled="true">Wi‑Fi 7 Certification Queue</a>
+                        <a href="#" class="mega-page" aria-disabled="true">Campus RF Health Review</a>
+                        <a href="#" class="mega-page" aria-disabled="true">Access Point Lifecycle Hub</a>
+                        <a href="#" class="mega-page" aria-disabled="true">Microwave Roaming Mesh</a>
+                      </div>
+                    </div>
+                    <div class="mega-tier">
+                      <h5>Consumer Access</h5>
+                      <div class="mega-pages">
+                        <a href="#" class="mega-page" aria-disabled="true">Rural Broadband Incentives Desk</a>
+                        <a href="#" class="mega-page" aria-disabled="true">Home Fiber Escalation Loop</a>
+                        <a href="#" class="mega-page" aria-disabled="true">Village Hotspot Grant Desk</a>
+                        <a href="#" class="mega-page" aria-disabled="true">Customer Safeguard Ombuds</a>
+                      </div>
+                    </div>
+                  </div>
+                </section>
+                <section class="mega-col">
+                  <h4>Transport Fiber</h4>
+                  <div class="mega-links">
+                    <div class="mega-tier">
+                      <h5>Long Haul</h5>
+                      <div class="mega-pages">
+                        <a href="#" class="mega-page" aria-disabled="true">Trans-Alaska Fiber Upgrades</a>
+                        <a href="#" class="mega-page" aria-disabled="true">Riverbed Bore Reinforcement</a>
+                        <a href="#" class="mega-page" aria-disabled="true">Glacier Splice Recovery Crew</a>
+                        <a href="#" class="mega-page" aria-disabled="true">Dark Fiber Brokerage Ledger</a>
+                      </div>
+                    </div>
+                    <div class="mega-tier">
+                      <h5>Metro Core</h5>
+                      <div class="mega-pages">
+                        <a href="#" class="mega-page" aria-disabled="true">Metro Loop Integrity Studio</a>
+                        <a href="#" class="mega-page" aria-disabled="true">Adaptive Power Regulation</a>
+                        <a href="#" class="mega-page" aria-disabled="true">Disaster Recovery Fiber Pool</a>
+                        <a href="#" class="mega-page" aria-disabled="true">Optical Path Arbitration Board</a>
+                      </div>
+                    </div>
+                    <div class="mega-tier">
+                      <h5>Maintenance</h5>
+                      <div class="mega-pages">
+                        <a href="#" class="mega-page" aria-disabled="true">High Latitude OTDR Archives</a>
+                        <a href="#" class="mega-page" aria-disabled="true">Fiber Inspection Flight Plans</a>
+                        <a href="#" class="mega-page" aria-disabled="true">Subsea Cable Integrity Desk</a>
+                        <a href="#" class="mega-page" aria-disabled="true">Access Easement Compliance</a>
+                      </div>
+                    </div>
+                  </div>
+                </section>
+                <section class="mega-col">
+                  <h4>Village Radio &amp; Satellite</h4>
+                  <div class="mega-links">
+                    <div class="mega-tier">
+                      <h5>Village Radio</h5>
+                      <div class="mega-pages">
+                        <a href="#" class="mega-page" aria-disabled="true">Village Radio Licensing Hub</a>
+                        <a href="#" class="mega-page" aria-disabled="true">Bush Pilot HF Scheduling</a>
+                        <a href="#" class="mega-page" aria-disabled="true">Legacy Repeater Retirement</a>
+                        <a href="#" class="mega-page" aria-disabled="true">Village Radio Guild Logistics</a>
+                      </div>
+                    </div>
+                    <div class="mega-tier">
+                      <h5>Microwave Corridors</h5>
+                      <div class="mega-pages">
+                        <a href="#" class="mega-page" aria-disabled="true">Microwave Tower Winterization</a>
+                        <a href="#" class="mega-page" aria-disabled="true">Aurora Scatter Experiment Lab</a>
+                        <a href="#" class="mega-page" aria-disabled="true">Remote Annunciator Dispatch</a>
+                        <a href="#" class="mega-page" aria-disabled="true">Coax Reclamation Program</a>
+                      </div>
+                    </div>
+                    <div class="mega-tier">
+                      <h5>Satellite &amp; Space</h5>
+                      <div class="mega-pages">
+                        <a href="#" class="mega-page" aria-disabled="true">LEO Backhaul Arbitration Desk</a>
+                        <a href="#" class="mega-page" aria-disabled="true">GEO Lease Compliance Office</a>
+                        <a href="#" class="mega-page" aria-disabled="true">Space Weather Briefing Cell</a>
+                        <a href="#" class="mega-page" aria-disabled="true">Satphone Certification Depot</a>
+                      </div>
+                    </div>
+                  </div>
+                </section>
+                <section class="mega-col">
+                  <h4>Spectrum &amp; Facilities</h4>
+                  <div class="mega-links">
+                    <div class="mega-tier">
+                      <h5>Spectrum Office</h5>
+                      <div class="mega-pages">
+                        <a href="#" class="mega-page" aria-disabled="true">FCC Filing Rapid Response</a>
+                        <a href="#" class="mega-page" aria-disabled="true">Alaska Spectrum Stewardship Board</a>
+                        <a href="#" class="mega-page" aria-disabled="true">Interference Mitigation Cadre</a>
+                        <a href="#" class="mega-page" aria-disabled="true">Emergency Waiver Repository</a>
+                      </div>
+                    </div>
+                    <div class="mega-tier">
+                      <h5>Power &amp; Facilities</h5>
+                      <div class="mega-pages">
+                        <a href="#" class="mega-page" aria-disabled="true">Hyperscale Power Stability Memos</a>
+                        <a href="#" class="mega-page" aria-disabled="true">Fuel Cell Deployment Office</a>
+                        <a href="#" class="mega-page" aria-disabled="true">Battery Reserve Arbitration Pool</a>
+                        <a href="#" class="mega-page" aria-disabled="true">Cooling Tower Optimization Squad</a>
+                      </div>
+                    </div>
+                    <div class="mega-tier">
+                      <h5>Policy Labs</h5>
+                      <div class="mega-pages">
+                        <a href="#" class="mega-page" aria-disabled="true">Rural Priority Auction Desk</a>
+                        <a href="#" class="mega-page" aria-disabled="true">Grid Coordination Hotline</a>
+                        <a href="#" class="mega-page" aria-disabled="true">Spectrum Analytics Command</a>
+                        <a href="#" class="mega-page" aria-disabled="true">Data Hall Illumination Charter</a>
+                      </div>
+                    </div>
+                  </div>
+                </section>
+              </div>
+            </div>
+          </li>
+          <!-- Managed Operations -->
+          <li class="nav-item" role="none">
+            <button type="button" class="nav-tile" role="menuitem" aria-haspopup="true" aria-expanded="false" aria-disabled="true">Managed Operations</button>
+            <div class="mega-panel" role="menu" aria-label="Managed operations catalog">
+              <div class="mega-grid">
+                <section class="mega-col">
+                  <h4>Managed Solutions</h4>
+                  <div class="mega-links">
+                    <div class="mega-tier">
+                      <h5>Onboarding Program</h5>
+                      <div class="mega-pages">
+                        <a href="#" class="mega-page" aria-disabled="true">Enterprise Onboarding Concierge</a>
+                        <a href="#" class="mega-page" aria-disabled="true">SLA Negotiation Cabinet</a>
+                        <a href="#" class="mega-page" aria-disabled="true">Contract Renewal Forecast Desk</a>
+                        <a href="#" class="mega-page" aria-disabled="true">Billing Simulation Studio</a>
+                      </div>
+                    </div>
+                    <div class="mega-tier">
+                      <h5>Lifecycle Architecture</h5>
+                      <div class="mega-pages">
+                        <a href="#" class="mega-page" aria-disabled="true">Lifecycle Architecture Arbitration</a>
+                        <a href="#" class="mega-page" aria-disabled="true">Service Blueprint Publishing</a>
+                        <a href="#" class="mega-page" aria-disabled="true">Change Exception Mediation</a>
+                        <a href="#" class="mega-page" aria-disabled="true">Portfolio Roadmap Office</a>
+                      </div>
+                    </div>
+                    <div class="mega-tier">
+                      <h5>Governance Cabinet</h5>
+                      <div class="mega-pages">
+                        <a href="#" class="mega-page" aria-disabled="true">Governance Exception Review</a>
+                        <a href="#" class="mega-page" aria-disabled="true">Customer Advisory Registry</a>
+                        <a href="#" class="mega-page" aria-disabled="true">Escalation Charter Council</a>
+                        <a href="#" class="mega-page" aria-disabled="true">Operational Risk Playbooks</a>
+                      </div>
+                    </div>
+                  </div>
+                </section>
+                <section class="mega-col">
+                  <h4>Cloud &amp; Datacenter</h4>
+                  <div class="mega-links">
+                    <div class="mega-tier">
+                      <h5>Compute Fabric</h5>
+                      <div class="mega-pages">
+                        <a href="#" class="mega-page" aria-disabled="true">Juneau Cloud Fabric Ops</a>
+                        <a href="#" class="mega-page" aria-disabled="true">Anchorage Colocation Stewardship</a>
+                        <a href="#" class="mega-page" aria-disabled="true">Hyperconverged Refresh Council</a>
+                        <a href="#" class="mega-page" aria-disabled="true">Workload Placement Bureau</a>
+                      </div>
+                    </div>
+                    <div class="mega-tier">
+                      <h5>Storage &amp; Backup</h5>
+                      <div class="mega-pages">
+                        <a href="#" class="mega-page" aria-disabled="true">Object Storage Sovereignty Desk</a>
+                        <a href="#" class="mega-page" aria-disabled="true">Backup Tape Airlift Program</a>
+                        <a href="#" class="mega-page" aria-disabled="true">Archive Lifecycle Inspectors</a>
+                        <a href="#" class="mega-page" aria-disabled="true">Data Gravity Consulting Bench</a>
+                      </div>
+                    </div>
+                    <div class="mega-tier">
+                      <h5>Remote Hands</h5>
+                      <div class="mega-pages">
+                        <a href="#" class="mega-page" aria-disabled="true">DCIM Telemetry Guild</a>
+                        <a href="#" class="mega-page" aria-disabled="true">Remote Hands Flight Deck</a>
+                        <a href="#" class="mega-page" aria-disabled="true">Cabinet Access Arbitration</a>
+                        <a href="#" class="mega-page" aria-disabled="true">Customer Equipment Concierge</a>
+                      </div>
+                    </div>
+                  </div>
+                </section>
+                <section class="mega-col">
+                  <h4>Security &amp; Observability</h4>
+                  <div class="mega-links">
+                    <div class="mega-tier">
+                      <h5>SOC Command</h5>
+                      <div class="mega-pages">
+                        <a href="#" class="mega-page" aria-disabled="true">Zero Trust Field Command</a>
+                        <a href="#" class="mega-page" aria-disabled="true">SOC Shift Coordination</a>
+                        <a href="#" class="mega-page" aria-disabled="true">OT Segmentation Advisors</a>
+                        <a href="#" class="mega-page" aria-disabled="true">Incident Simulation Hangar</a>
+                      </div>
+                    </div>
+                    <div class="mega-tier">
+                      <h5>Identity &amp; Access</h5>
+                      <div class="mega-pages">
+                        <a href="#" class="mega-page" aria-disabled="true">Identity Containment Bureau</a>
+                        <a href="#" class="mega-page" aria-disabled="true">Privileged Credential Vault</a>
+                        <a href="#" class="mega-page" aria-disabled="true">Privacy Impact Response Pod</a>
+                        <a href="#" class="mega-page" aria-disabled="true">Regulatory Evidence Staging</a>
+                      </div>
+                    </div>
+                    <div class="mega-tier">
+                      <h5>Telemetry &amp; Automation</h5>
+                      <div class="mega-pages">
+                        <a href="#" class="mega-page" aria-disabled="true">Runbook Robotics Syndicate</a>
+                        <a href="#" class="mega-page" aria-disabled="true">Telemetry Normalization Lab</a>
+                        <a href="#" class="mega-page" aria-disabled="true">Synthetic Transaction Wardens</a>
+                        <a href="#" class="mega-page" aria-disabled="true">API Contract Clearinghouse</a>
+                      </div>
+                    </div>
+                  </div>
+                </section>
+                <section class="mega-col">
+                  <h4>School &amp; Managed IT</h4>
+                  <div class="mega-links">
+                    <div class="mega-tier">
+                      <h5>District Services</h5>
+                      <div class="mega-pages">
+                        <a href="#" class="mega-page" aria-disabled="true">District Helpdesk Federation</a>
+                        <a href="#" class="mega-page" aria-disabled="true">Transportation GPS Sync Desk</a>
+                        <a href="#" class="mega-page" aria-disabled="true">Digital Curriculum Cache</a>
+                        <a href="#" class="mega-page" aria-disabled="true">Parent Communication Switch</a>
+                      </div>
+                    </div>
+                    <div class="mega-tier">
+                      <h5>Campus Facilities</h5>
+                      <div class="mega-pages">
+                        <a href="#" class="mega-page" aria-disabled="true">Campus Wi‑Fi Heatmap Bureau</a>
+                        <a href="#" class="mega-page" aria-disabled="true">Dorm ResNet Arbitration</a>
+                        <a href="#" class="mega-page" aria-disabled="true">Athletics Streaming Authority</a>
+                        <a href="#" class="mega-page" aria-disabled="true">Safety Camera Mesh Operations</a>
+                      </div>
+                    </div>
+                    <div class="mega-tier">
+                      <h5>Communications</h5>
+                      <div class="mega-pages">
+                        <a href="#" class="mega-page" aria-disabled="true">Village Radio Classroom Kits</a>
+                        <a href="#" class="mega-page" aria-disabled="true">Announcement Scheduling Desk</a>
+                        <a href="#" class="mega-page" aria-disabled="true">Community Liaison Cadre</a>
+                        <a href="#" class="mega-page" aria-disabled="true">Crisis Notification Templates</a>
+                      </div>
+                    </div>
+                  </div>
+                </section>
+              </div>
+            </div>
+          </li>
+          <!-- Field &amp; Remote -->
+          <li class="nav-item" role="none">
+            <button type="button" class="nav-tile" role="menuitem" aria-haspopup="true" aria-expanded="false" aria-disabled="true">Field &amp; Remote</button>
+            <div class="mega-panel" role="menu" aria-label="Field and remote programs">
+              <div class="mega-grid">
+                <section class="mega-col">
+                  <h4>Field Logistics</h4>
+                  <div class="mega-links">
+                    <div class="mega-tier">
+                      <h5>Aviation Support</h5>
+                      <div class="mega-pages">
+                        <a href="#" class="mega-page" aria-disabled="true">Bush Charter Staging Desk</a>
+                        <a href="#" class="mega-page" aria-disabled="true">Runway Surface Radar Splits</a>
+                        <a href="#" class="mega-page" aria-disabled="true">FAA Liaison Loop</a>
+                        <a href="#" class="mega-page" aria-disabled="true">Icebreaker Convoy Radio</a>
+                      </div>
+                    </div>
+                    <div class="mega-tier">
+                      <h5>Surface Operations</h5>
+                      <div class="mega-pages">
+                        <a href="#" class="mega-page" aria-disabled="true">Ice Road Fleet Telemetry</a>
+                        <a href="#" class="mega-page" aria-disabled="true">Fuel Cache Surveillance Pods</a>
+                        <a href="#" class="mega-page" aria-disabled="true">Cargo Drone Coordination</a>
+                        <a href="#" class="mega-page" aria-disabled="true">Overnight Kitting Annex</a>
+                      </div>
+                    </div>
+                    <div class="mega-tier">
+                      <h5>Depot &amp; Permitting</h5>
+                      <div class="mega-pages">
+                        <a href="#" class="mega-page" aria-disabled="true">Tool Crate Sterilization Lab</a>
+                        <a href="#" class="mega-page" aria-disabled="true">Remote Permit Packetization</a>
+                        <a href="#" class="mega-page" aria-disabled="true">Field Safety Certification Tank</a>
+                        <a href="#" class="mega-page" aria-disabled="true">Crew Manifest Checker</a>
+                      </div>
+                    </div>
+                  </div>
+                </section>
+                <section class="mega-col">
+                  <h4>Energy &amp; Mining</h4>
+                  <div class="mega-links">
+                    <div class="mega-tier">
+                      <h5>Pipeline Services</h5>
+                      <div class="mega-pages">
+                        <a href="#" class="mega-page" aria-disabled="true">Pipeline Sensor Arbitration</a>
+                        <a href="#" class="mega-page" aria-disabled="true">Cathodic Protection Uplinks</a>
+                        <a href="#" class="mega-page" aria-disabled="true">LNG Terminal Signal Guard</a>
+                        <a href="#" class="mega-page" aria-disabled="true">Environmental Metrics Vault</a>
+                      </div>
+                    </div>
+                    <div class="mega-tier">
+                      <h5>Extraction Ops</h5>
+                      <div class="mega-pages">
+                        <a href="#" class="mega-page" aria-disabled="true">Drill Site Wi‑Fi Marshals</a>
+                        <a href="#" class="mega-page" aria-disabled="true">Mine Ventilation Telemetry</a>
+                        <a href="#" class="mega-page" aria-disabled="true">Geothermal Control Cabin</a>
+                        <a href="#" class="mega-page" aria-disabled="true">Energy Partner Liaison Desk</a>
+                      </div>
+                    </div>
+                    <div class="mega-tier">
+                      <h5>Environmental Safeguards</h5>
+                      <div class="mega-pages">
+                        <a href="#" class="mega-page" aria-disabled="true">Glacier Watch Sensor Stack</a>
+                        <a href="#" class="mega-page" aria-disabled="true">Seismic Array Assurance</a>
+                        <a href="#" class="mega-page" aria-disabled="true">Climate Lab HPC Access</a>
+                        <a href="#" class="mega-page" aria-disabled="true">Data Sovereignty Charter</a>
+                      </div>
+                    </div>
+                  </div>
+                </section>
+                <section class="mega-col">
+                  <h4>Village Infrastructure</h4>
+                  <div class="mega-links">
+                    <div class="mega-tier">
+                      <h5>Essential Utilities</h5>
+                      <div class="mega-pages">
+                        <a href="#" class="mega-page" aria-disabled="true">Water Plant SCADA Guardians</a>
+                        <a href="#" class="mega-page" aria-disabled="true">Power Coop Dispatch Desk</a>
+                        <a href="#" class="mega-page" aria-disabled="true">Waste Transfer IoT Audits</a>
+                        <a href="#" class="mega-page" aria-disabled="true">Microgrid Stability Team</a>
+                      </div>
+                    </div>
+                    <div class="mega-tier">
+                      <h5>Civic Services</h5>
+                      <div class="mega-pages">
+                        <a href="#" class="mega-page" aria-disabled="true">Council Emergency Kiosk</a>
+                        <a href="#" class="mega-page" aria-disabled="true">Village Makerspace Connectivity</a>
+                        <a href="#" class="mega-page" aria-disabled="true">Village Radio Guild Logistics</a>
+                        <a href="#" class="mega-page" aria-disabled="true">Community Broadcast Scheduler</a>
+                      </div>
+                    </div>
+                    <div class="mega-tier">
+                      <h5>Health &amp; Relief</h5>
+                      <div class="mega-pages">
+                        <a href="#" class="mega-page" aria-disabled="true">Clinic Generator Watch</a>
+                        <a href="#" class="mega-page" aria-disabled="true">Telehealth Pods Liaison</a>
+                        <a href="#" class="mega-page" aria-disabled="true">Emergency Kit Fulfillment</a>
+                        <a href="#" class="mega-page" aria-disabled="true">Village Radio Medical Relay</a>
+                      </div>
+                    </div>
+                  </div>
+                </section>
+                <section class="mega-col">
+                  <h4>Seasonal &amp; Research</h4>
+                  <div class="mega-links">
+                    <div class="mega-tier">
+                      <h5>Seasonal Ops</h5>
+                      <div class="mega-pages">
+                        <a href="#" class="mega-page" aria-disabled="true">Summer Construction PMO</a>
+                        <a href="#" class="mega-page" aria-disabled="true">Winter Storm Surge Team</a>
+                        <a href="#" class="mega-page" aria-disabled="true">Tourist Surge Wi‑Fi Bureau</a>
+                        <a href="#" class="mega-page" aria-disabled="true">Fire Season Air Tanker Net</a>
+                      </div>
+                    </div>
+                    <div class="mega-tier">
+                      <h5>Research Expeditions</h5>
+                      <div class="mega-pages">
+                        <a href="#" class="mega-page" aria-disabled="true">Research Vessel VPN Desk</a>
+                        <a href="#" class="mega-page" aria-disabled="true">Field Scientist Helpline</a>
+                        <a href="#" class="mega-page" aria-disabled="true">Remote Data Cache Drops</a>
+                        <a href="#" class="mega-page" aria-disabled="true">Arctic Sensor Loaner Pool</a>
+                      </div>
+                    </div>
+                    <div class="mega-tier">
+                      <h5>Environmental Intel</h5>
+                      <div class="mega-pages">
+                        <a href="#" class="mega-page" aria-disabled="true">Wildlife Tagging Backhaul</a>
+                        <a href="#" class="mega-page" aria-disabled="true">Permafrost Observatory Mesh</a>
+                        <a href="#" class="mega-page" aria-disabled="true">Event Command Trailer Ops</a>
+                        <a href="#" class="mega-page" aria-disabled="true">Holiday Bandwidth Amnesty</a>
+                      </div>
+                    </div>
+                  </div>
+                </section>
+              </div>
+            </div>
+          </li>
+          <!-- Corporate Programs -->
+          <li class="nav-item" role="none">
+            <button type="button" class="nav-tile" role="menuitem" aria-haspopup="true" aria-expanded="false" aria-disabled="true">Corporate Programs</button>
+            <div class="mega-panel" role="menu" aria-label="Corporate alliances and programs">
+              <div class="mega-grid">
+                <section class="mega-col">
+                  <h4>Corporate Partners</h4>
+                  <div class="mega-links">
+                    <div class="mega-tier">
+                      <h5>Strategic Alliances</h5>
+                      <div class="mega-pages">
+                        <a href="#" class="mega-page" aria-disabled="true">Strategic Anchorage Alliances</a>
+                        <a href="#" class="mega-page" aria-disabled="true">Energy Consortium Secretariat</a>
+                        <a href="#" class="mega-page" aria-disabled="true">Corporate Partner Scorecards</a>
+                        <a href="#" class="mega-page" aria-disabled="true">Joint Venture Coordination Hub</a>
+                      </div>
+                    </div>
+                    <div class="mega-tier">
+                      <h5>OEM &amp; Labs</h5>
+                      <div class="mega-pages">
+                        <a href="#" class="mega-page" aria-disabled="true">OEM Joint Lab Scheduling</a>
+                        <a href="#" class="mega-page" aria-disabled="true">Partner Innovation Credits</a>
+                        <a href="#" class="mega-page" aria-disabled="true">Co-Marketing Production Desk</a>
+                        <a href="#" class="mega-page" aria-disabled="true">Channel Capacity Arbitration</a>
+                      </div>
+                    </div>
+                    <div class="mega-tier">
+                      <h5>Channel Programs</h5>
+                      <div class="mega-pages">
+                        <a href="#" class="mega-page" aria-disabled="true">Tourism Tech Collective</a>
+                        <a href="#" class="mega-page" aria-disabled="true">Fisheries Digital Council</a>
+                        <a href="#" class="mega-page" aria-disabled="true">Retail Modernization Cohort</a>
+                        <a href="#" class="mega-page" aria-disabled="true">Indigenous Business Exchange</a>
+                      </div>
+                    </div>
+                  </div>
+                </section>
+                <section class="mega-col">
+                  <h4>Finance &amp; Procurement</h4>
+                  <div class="mega-links">
+                    <div class="mega-tier">
+                      <h5>Finance Office</h5>
+                      <div class="mega-pages">
+                        <a href="#" class="mega-page" aria-disabled="true">Enterprise Contract Library</a>
+                        <a href="#" class="mega-page" aria-disabled="true">Capital Projects Ledger</a>
+                        <a href="#" class="mega-page" aria-disabled="true">Usage Mediation Clearinghouse</a>
+                        <a href="#" class="mega-page" aria-disabled="true">Revenue Assurance Patrol</a>
+                      </div>
+                    </div>
+                    <div class="mega-tier">
+                      <h5>Procurement Office</h5>
+                      <div class="mega-pages">
+                        <a href="#" class="mega-page" aria-disabled="true">Global Hardware Waitlist</a>
+                        <a href="#" class="mega-page" aria-disabled="true">Vendor Scorecard Tribunal</a>
+                        <a href="#" class="mega-page" aria-disabled="true">Critical Spares Vault</a>
+                        <a href="#" class="mega-page" aria-disabled="true">Reverse Logistics Runway</a>
+                      </div>
+                    </div>
+                    <div class="mega-tier">
+                      <h5>Compliance &amp; Risk</h5>
+                      <div class="mega-pages">
+                        <a href="#" class="mega-page" aria-disabled="true">Credits &amp; Rebates Bureau</a>
+                        <a href="#" class="mega-page" aria-disabled="true">Treasury Risk Signoffs</a>
+                        <a href="#" class="mega-page" aria-disabled="true">Sustainability Audit Team</a>
+                        <a href="#" class="mega-page" aria-disabled="true">Customs &amp; Trade Routing</a>
+                      </div>
+                    </div>
+                  </div>
+                </section>
+                <section class="mega-col">
+                  <h4>Comms &amp; Outreach</h4>
+                  <div class="mega-links">
+                    <div class="mega-tier">
+                      <h5>Public Affairs</h5>
+                      <div class="mega-pages">
+                        <a href="#" class="mega-page" aria-disabled="true">Public Affairs Content Mill</a>
+                        <a href="#" class="mega-page" aria-disabled="true">Executive Testimony Prep</a>
+                        <a href="#" class="mega-page" aria-disabled="true">Stakeholder Alignment Studio</a>
+                        <a href="#" class="mega-page" aria-disabled="true">Crisis Messaging Situation Room</a>
+                      </div>
+                    </div>
+                    <div class="mega-tier">
+                      <h5>Community &amp; Philanthropy</h5>
+                      <div class="mega-pages">
+                        <a href="#" class="mega-page" aria-disabled="true">Community Investment Board</a>
+                        <a href="#" class="mega-page" aria-disabled="true">Philanthropy Impact Tracking</a>
+                        <a href="#" class="mega-page" aria-disabled="true">Rural Engagement Concierge</a>
+                        <a href="#" class="mega-page" aria-disabled="true">Corporate Volunteer Bureau</a>
+                      </div>
+                    </div>
+                    <div class="mega-tier">
+                      <h5>Media Holdings</h5>
+                      <div class="mega-pages">
+                        <a href="#" class="mega-page" aria-disabled="true">Media Holdings Desk</a>
+                        <a href="#" class="mega-page" aria-disabled="true">Broadcast Syndication Council</a>
+                        <a href="#" class="mega-page" aria-disabled="true">Investor Communications Hub</a>
+                        <a href="#" class="mega-page" aria-disabled="true">Brand Safeguard Hotline</a>
+                      </div>
+                    </div>
+                  </div>
+                </section>
+                <section class="mega-col">
+                  <h4>Innovation &amp; Workforce</h4>
+                  <div class="mega-links">
+                    <div class="mega-tier">
+                      <h5>Labs &amp; Incubation</h5>
+                      <div class="mega-pages">
+                        <a href="#" class="mega-page" aria-disabled="true">Autonomous Node Skunkworks</a>
+                        <a href="#" class="mega-page" aria-disabled="true">Spectrum Analytics Sandbox</a>
+                        <a href="#" class="mega-page" aria-disabled="true">Advanced Materials Bench</a>
+                        <a href="#" class="mega-page" aria-disabled="true">Simulation Theater Crew</a>
+                      </div>
+                    </div>
+                    <div class="mega-tier">
+                      <h5>Talent &amp; Training</h5>
+                      <div class="mega-pages">
+                        <a href="#" class="mega-page" aria-disabled="true">Technical Fellowship Board</a>
+                        <a href="#" class="mega-page" aria-disabled="true">Workforce Analytics Control</a>
+                        <a href="#" class="mega-page" aria-disabled="true">Campus Recruiting Pass</a>
+                        <a href="#" class="mega-page" aria-disabled="true">Leadership Simulation Hub</a>
+                      </div>
+                    </div>
+                    <div class="mega-tier">
+                      <h5>Governance &amp; Strategy</h5>
+                      <div class="mega-pages">
+                        <a href="#" class="mega-page" aria-disabled="true">Strategy OKR Clearinghouse</a>
+                        <a href="#" class="mega-page" aria-disabled="true">Enterprise Risk Cartographers</a>
+                        <a href="#" class="mega-page" aria-disabled="true">Board Packet Assembly Line</a>
+                        <a href="#" class="mega-page" aria-disabled="true">Office of Sarcastic Compliance</a>
+                      </div>
+                    </div>
+                  </div>
+                </section>
+              </div>
+            </div>
+          </li>
+          <!-- Support &amp; Governance -->
+          <li class="nav-item" role="none">
+            <button type="button" class="nav-tile" role="menuitem" aria-haspopup="true" aria-expanded="false" aria-disabled="true">Support &amp; Governance</button>
+            <div class="mega-panel" role="menu" aria-label="Support and governance catalog">
+              <div class="mega-grid">
+                <section class="mega-col">
+                  <h4>Tech Support</h4>
+                  <div class="mega-links">
+                    <div class="mega-tier">
+                      <h5>Helpdesk</h5>
+                      <div class="mega-pages">
+                        <a href="#" class="mega-page" aria-disabled="true">Tier 0 Automation Queue</a>
+                        <a href="#" class="mega-page" aria-disabled="true">Tier 1 Anchorage Pod</a>
+                        <a href="#" class="mega-page" aria-disabled="true">Tier 2 Bureaucracy Bridge</a>
+                        <a href="#" class="mega-page" aria-disabled="true">Maintenance Window Paging</a>
+                      </div>
+                    </div>
+                    <div class="mega-tier">
+                      <h5>VIP &amp; Executive</h5>
+                      <div class="mega-pages">
+                        <a href="#" class="mega-page" aria-disabled="true">VIP Device Concierge</a>
+                        <a href="#" class="mega-page" aria-disabled="true">Firmware Recall Hotline</a>
+                        <a href="#" class="mega-page" aria-disabled="true">White-Glove Travel Desk</a>
+                        <a href="#" class="mega-page" aria-disabled="true">Escalation Quality Council</a>
+                      </div>
+                    </div>
+                    <div class="mega-tier">
+                      <h5>Portal &amp; Knowledge</h5>
+                      <div class="mega-pages">
+                        <a href="#" class="mega-page" aria-disabled="true">Identity Proofing Desk</a>
+                        <a href="#" class="mega-page" aria-disabled="true">Access Request Clearinghouse</a>
+                        <a href="#" class="mega-page" aria-disabled="true">Knowledge Base Scribes</a>
+                        <a href="#" class="mega-page" aria-disabled="true">Feedback Arbitration Forum</a>
+                      </div>
+                    </div>
+                  </div>
+                </section>
+                <section class="mega-col">
+                  <h4>NOC &amp; Command</h4>
+                  <div class="mega-links">
+                    <div class="mega-tier">
+                      <h5>Network Command</h5>
+                      <div class="mega-pages">
+                        <a href="#" class="mega-page" aria-disabled="true">Core Network Eyes-On-Glass</a>
+                        <a href="#" class="mega-page" aria-disabled="true">Transport Fault Isolation Wing</a>
+                        <a href="#" class="mega-page" aria-disabled="true">NOC Residency Program</a>
+                        <a href="#" class="mega-page" aria-disabled="true">Cross-Polar War Room</a>
+                      </div>
+                    </div>
+                    <div class="mega-tier">
+                      <h5>Wireless Command</h5>
+                      <div class="mega-pages">
+                        <a href="#" class="mega-page" aria-disabled="true">Wireless Optimization Flight</a>
+                        <a href="#" class="mega-page" aria-disabled="true">Spectrum Incident Bridge</a>
+                        <a href="#" class="mega-page" aria-disabled="true">Village Radio Paging Desk</a>
+                        <a href="#" class="mega-page" aria-disabled="true">Maritime Comms Liaison</a>
+                      </div>
+                    </div>
+                    <div class="mega-tier">
+                      <h5>Incident &amp; Change</h5>
+                      <div class="mega-pages">
+                        <a href="#" class="mega-page" aria-disabled="true">Incident Bridge Producers</a>
+                        <a href="#" class="mega-page" aria-disabled="true">Change Advisory Orchestra</a>
+                        <a href="#" class="mega-page" aria-disabled="true">Outage Communications Studio</a>
+                        <a href="#" class="mega-page" aria-disabled="true">Post-Incident Lab</a>
+                      </div>
+                    </div>
+                  </div>
+                </section>
+                <section class="mega-col">
+                  <h4>Compliance &amp; Legal</h4>
+                  <div class="mega-links">
+                    <div class="mega-tier">
+                      <h5>Regulatory Affairs</h5>
+                      <div class="mega-pages">
+                        <a href="#" class="mega-page" aria-disabled="true">Regulatory Hearings Office</a>
+                        <a href="#" class="mega-page" aria-disabled="true">Policy Revision Secretariat</a>
+                        <a href="#" class="mega-page" aria-disabled="true">Ethics Hotline Custodians</a>
+                        <a href="#" class="mega-page" aria-disabled="true">Records Retention Schedulers</a>
+                      </div>
+                    </div>
+                    <div class="mega-tier">
+                      <h5>Audit &amp; Evidence</h5>
+                      <div class="mega-pages">
+                        <a href="#" class="mega-page" aria-disabled="true">Audit Evidence Warehouse</a>
+                        <a href="#" class="mega-page" aria-disabled="true">Insurance &amp; Claims Bureau</a>
+                        <a href="#" class="mega-page" aria-disabled="true">Security Certification Desk</a>
+                        <a href="#" class="mega-page" aria-disabled="true">Compliance Analytics Studio</a>
+                      </div>
+                    </div>
+                    <div class="mega-tier">
+                      <h5>Contracts &amp; Risk</h5>
+                      <div class="mega-pages">
+                        <a href="#" class="mega-page" aria-disabled="true">Contract Clause Interpreters</a>
+                        <a href="#" class="mega-page" aria-disabled="true">Acquisition Due Diligence Pod</a>
+                        <a href="#" class="mega-page" aria-disabled="true">Vendor Dependency Tracker</a>
+                        <a href="#" class="mega-page" aria-disabled="true">Corporate Memory Archive</a>
+                      </div>
+                    </div>
+                  </div>
+                </section>
+                <section class="mega-col">
+                  <h4>Workforce &amp; Executive</h4>
+                  <div class="mega-links">
+                    <div class="mega-tier">
+                      <h5>Training &amp; Safety</h5>
+                      <div class="mega-pages">
+                        <a href="#" class="mega-page" aria-disabled="true">Safety Certification Vault</a>
+                        <a href="#" class="mega-page" aria-disabled="true">Travel &amp; Rotation Desk</a>
+                        <a href="#" class="mega-page" aria-disabled="true">Credential Renewal Counter</a>
+                        <a href="#" class="mega-page" aria-disabled="true">Workforce Remote Kits Depot</a>
+                      </div>
+                    </div>
+                    <div class="mega-tier">
+                      <h5>People &amp; Culture</h5>
+                      <div class="mega-pages">
+                        <a href="#" class="mega-page" aria-disabled="true">Workforce Analytics Control</a>
+                        <a href="#" class="mega-page" aria-disabled="true">Campus Recruiting Pass</a>
+                        <a href="#" class="mega-page" aria-disabled="true">Cross-Matrix Staffing Pool</a>
+                        <a href="#" class="mega-page" aria-disabled="true">Employee Experience Bureau</a>
+                      </div>
+                    </div>
+                    <div class="mega-tier">
+                      <h5>Executive Oversight</h5>
+                      <div class="mega-pages">
+                        <a href="#" class="mega-page" aria-disabled="true">CEO Directive Tracker</a>
+                        <a href="#" class="mega-page" aria-disabled="true">Board Packet Assembly Line</a>
+                        <a href="#" class="mega-page" aria-disabled="true">Strategy OKR Clearinghouse</a>
+                        <a href="#" class="mega-page" aria-disabled="true">Enterprise Risk Cartographers</a>
+                      </div>
+                    </div>
+                  </div>
+                </section>
+              </div>
+            </div>
+          </li>
+        </ul>
+      </nav>
+
+      <div class="header-right">
+        <button class="ai-chat" type="button" aria-disabled="true" aria-label="Open AI liaison (offline)">
+          <svg width="26" height="26" viewBox="0 0 32 32" fill="none" aria-hidden="true">
+            <path d="M4 7.5a3.5 3.5 0 0 1 3.5-3.5h17a3.5 3.5 0 0 1 3.5 3.5v9a3.5 3.5 0 0 1-3.5 3.5h-7.4l-4.1 4.6c-.9 1-2.5.4-2.5-.9v-3.7H7.5A3.5 3.5 0 0 1 4 16.5v-9z" fill="rgba(255,255,255,.08)" stroke="rgba(255,255,255,.35)" stroke-width="1.2"/>
+            <path d="M10 12h12M10 16h7" stroke="#FFE28A" stroke-width="1.6" stroke-linecap="round"/>
+            <circle cx="24.5" cy="6.5" r="2.5" fill="#FFE28A"/>
+          </svg>
+          <span>AI Liaison</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main id="main" tabindex="-1">
+    <section class="hero" aria-labelledby="hero-title">
+      <div class="container hero-inner stack">
+        <h1 id="hero-title">The backbone of Alaska’s digital infrastructure.</h1>
+        <p>State-scale ISP and managed services delivering resilient connectivity, security, and cloud—engineered for Arctic distances and real-world operations.</p>
+        <div class="row actions">
+          <a href="#" class="btn btn--primary" aria-disabled="true">Get Connected</a>
+          <a href="#" class="btn" aria-disabled="true">Talk to an Expert</a>
+        </div>
+        <div class="hero-note">Systems undergoing upgrade. Self-service tools will be back shortly.</div>
+      </div>
+    </section>
+
+    <section class="ribbon" aria-label="Key metrics">
+      <div class="container">
+        <div class="stats" role="list">
+          <div class="stat" role="listitem" aria-label="#1 ISP footprint across Alaska">
+            <strong>#1 ISP footprint across Alaska</strong>
+            <span>Rings, routes, and reach where it matters</span>
+          </div>
+          <div class="stat" role="listitem" aria-label="2.6M+ miles of lit routes">
+            <strong>2.6M+ miles</strong>
+            <span>Lit routes and microwave links</span>
+          </div>
+          <div class="stat" role="listitem" aria-label="99.995% availability">
+            <strong>99.995% availability</strong>
+            <span>Core network measured monthly</span>
+          </div>
+          <div class="stat" role="listitem" aria-label="140+ communities served">
+            <strong>140+ communities</strong>
+            <span>From hubs to remote villages</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="container stack" aria-labelledby="solutions">
+      <h2 id="solutions">Solutions</h2>
+      <div class="grid cols-3">
+        <article class="card">
+          <div class="eyebrow">Connectivity</div>
+          <h3>Business Internet &amp; SD-WAN</h3>
+          <p>Private, secure transport with application-aware routing and high-availability design.</p>
+          <a href="#" aria-disabled="true">Learn more</a>
+        </article>
+        <article class="card">
+          <div class="eyebrow">Campus</div>
+          <h3>Managed Wi-Fi for campuses</h3>
+          <p>Predictable coverage, capacity planning, and lifecycle management at scale.</p>
+          <a href="#" aria-disabled="true">Learn more</a>
+        </article>
+        <article class="card">
+          <div class="eyebrow">Cloud</div>
+          <h3>Cloud &amp; Colocation (Juneau • Anchorage)</h3>
+          <p>Facilities with redundant power, diverse fiber, and remote hands.</p>
+          <a href="#" aria-disabled="true">Learn more</a>
+        </article>
+        <article class="card">
+          <div class="eyebrow">Security</div>
+          <h3>Cybersecurity: SOC 24×7, MDR, Zero Trust</h3>
+          <p>Continuous monitoring and rapid response aligned to enterprise practice.</p>
+          <a href="#" aria-disabled="true">Learn more</a>
+        </article>
+        <article class="card">
+          <div class="eyebrow">Voice</div>
+          <h3>Voice &amp; Collaboration (SIP/Teams)</h3>
+          <p>Carrier interconnects and integration services with SLA options.</p>
+          <a href="#" aria-disabled="true">Learn more</a>
+        </article>
+        <article class="card">
+          <div class="eyebrow">Field</div>
+          <h3>Field Services &amp; Remote Site Ops</h3>
+          <p>Certified technicians and Arctic-ready logistics for remote sites.</p>
+          <a href="#" aria-disabled="true">Learn more</a>
+        </article>
+      </div>
+    </section>
+
+    <section class="container stack" aria-labelledby="industries">
+      <h2 id="industries">Industries We Serve</h2>
+      <div class="industries" role="list" aria-label="Industries">
+        <article class="industry" role="listitem" aria-label="State &amp; Local Government">
+          <img src="https://images.unsplash.com/photo-1562157873-818bc0726f68?auto=format&amp;fit=crop&amp;w=1200&amp;q=80" width="1200" height="720" loading="lazy" decoding="async" alt="Government building in Alaska under clear sky">
+          <div class="overlay" aria-hidden="true"></div>
+          <div class="content"><h3>State &amp; Local Government</h3><p>CJIS-aware interagency connectivity and redundancy planning.</p></div>
+        </article>
+        <article class="industry" role="listitem" aria-label="School Districts &amp; E-Rate">
+          <img src="https://images.unsplash.com/photo-1577896851231-70ef18881754?auto=format&amp;fit=crop&amp;w=1200&amp;q=80" width="1200" height="720" loading="lazy" decoding="async" alt="Classroom with students using devices">
+          <div class="overlay" aria-hidden="true"></div>
+          <div class="content"><h3>School Districts &amp; E‑Rate</h3><p>Managed Wi‑Fi and consistent classroom connectivity.</p></div>
+        </article>
+        <article class="industry" role="listitem" aria-label="Healthcare &amp; Telemedicine">
+          <img src="https://images.unsplash.com/photo-1580281657527-47f249e8f0f3?auto=format&amp;fit=crop&amp;w=1200&amp;q=80" width="1200" height="720" loading="lazy" decoding="async" alt="Clinician on a telemedicine call">
+          <div class="overlay" aria-hidden="true"></div>
+          <div class="content"><h3>Healthcare &amp; Telemedicine</h3><p>HIPAA-aligned transport and reliable clinical connectivity.</p></div>
+        </article>
+        <article class="industry" role="listitem" aria-label="Energy &amp; Mining">
+          <img src="https://images.unsplash.com/photo-1516784030430-9cc8f5a11d47?auto=format&amp;fit=crop&amp;w=1200&amp;q=80" width="1200" height="720" loading="lazy" decoding="async" alt="Industrial operations in cold environment">
+          <div class="overlay" aria-hidden="true"></div>
+          <div class="content"><h3>Energy &amp; Mining</h3><p>Telemetry and secure remote operations for critical infrastructure.</p></div>
+        </article>
+        <article class="industry" role="listitem" aria-label="Aviation &amp; Logistics">
+          <img src="https://images.unsplash.com/photo-1503376780353-7e6692767b70?auto=format&amp;fit=crop&amp;w=1200&amp;q=80" width="1200" height="720" loading="lazy" decoding="async" alt="Bush plane on a gravel airstrip">
+          <div class="overlay" aria-hidden="true"></div>
+          <div class="content"><h3>Aviation &amp; Logistics</h3><p>Priority QoS and tracking for terminals and fleet.</p></div>
+        </article>
+        <article class="industry" role="listitem" aria-label="Fisheries &amp; Tourism">
+          <img src="https://images.unsplash.com/photo-1520950939161-60d56e08e1d5?auto=format&amp;fit=crop&amp;w=1200&amp;q=80" width="1200" height="720" loading="lazy" decoding="async" alt="Fishing harbor at dock">
+          <div class="overlay" aria-hidden="true"></div>
+          <div class="content"><h3>Fisheries &amp; Tourism</h3><p>Seasonal capacity and shore-to-ship connectivity options.</p></div>
+        </article>
+        <article class="industry" role="listitem" aria-label="Small Business">
+          <img src="https://images.unsplash.com/photo-1515165562835-c4c1b57209d8?auto=format&amp;fit=crop&amp;w=1200&amp;q=80" width="1200" height="720" loading="lazy" decoding="async" alt="Small coastal storefront">
+          <div class="overlay" aria-hidden="true"></div>
+          <div class="content"><h3>Small Business</h3><p>Right-sized solutions, predictable support, and billing clarity.</p></div>
+        </article>
+      </div>
+    </section>
+
+    <section class="container stack" aria-labelledby="coverage">
+      <h2 id="coverage">Coverage &amp; Network</h2>
+      <div class="coverage" role="region" aria-label="Network coverage">
+        <figure class="map" role="img" aria-labelledby="akMapTitle akMapDesc">
+          <svg viewBox="0 0 800 520" width="800" height="520" xmlns="http://www.w3.org/2000/svg" aria-labelledby="akMapTitle akMapDesc" role="img" preserveAspectRatio="xMidYMid meet">
+            <title id="akMapTitle">GACIS Alaska coverage (stylized)</title>
+            <desc id="akMapDesc">Stylized map showing corridors and community points across Alaska.</desc>
+            <rect x="0" y="0" width="800" height="520" rx="0" fill="#050f2f" stroke="#010814"/>
+            <path d="M220 180 L300 150 L370 170 L430 210 L490 220 L540 260 L560 300 L520 340 L460 360 L410 340 L360 310 L300 300 L260 250 Z" fill="#DDEAF6" stroke="#BFD3E7" stroke-width="2"/>
+            <path d="M520 360 L560 400 L580 430 L600 470 L560 470 L520 430 Z" fill="#DDEAF6" stroke="#BFD3E7" stroke-width="2"/>
+            <path d="M310 260 C360 230, 430 240, 500 280 S600 360, 540 400" fill="none" stroke="#5FB3E3" stroke-width="5" stroke-linecap="round"/>
+            <path d="M280 280 C350 320, 420 330, 500 320 S600 300, 560 260" fill="none" stroke="#2BB673" stroke-width="5" stroke-linecap="round"/>
+            <path d="M260 250 Q350 200, 430 210" fill="none" stroke="#BE9B28" stroke-width="3" stroke-dasharray="6 6" stroke-linecap="round"/>
+            <g fill="#FFE28A" stroke="#010814" stroke-width="2">
+              <circle cx="300" cy="260" r="5"><title>Fairbanks</title></circle>
+              <circle cx="430" cy="210" r="5"><title>Anchorage</title></circle>
+              <circle cx="560" cy="430" r="5"><title>Juneau</title></circle>
+              <circle cx="360" cy="310" r="5"><title>Bethel</title></circle>
+              <circle cx="500" cy="320" r="5"><title>Kenai</title></circle>
+            </g>
+            <g font-family="-apple-system, 'Segoe UI', Roboto, Inter, Arial, sans-serif" font-size="12" fill="#FFE28A">
+              <rect x="28" y="380" width="300" height="100" rx="0" fill="#050f2f" stroke="#FFE28A"/>
+              <circle cx="50" cy="405" r="6" fill="#0B203A" stroke="#fff" stroke-width="2"/>
+              <text x="66" y="410">Community</text>
+              <line x1="40" y1="430" x2="70" y2="430" stroke="#5FB3E3" stroke-width="6" stroke-linecap="round"/>
+              <text x="80" y="435">Core corridor</text>
+              <line x1="40" y1="455" x2="70" y2="455" stroke="#2BB673" stroke-width="6" stroke-linecap="round"/>
+              <text x="80" y="460">Ring path</text>
+              <line x1="40" y1="480" x2="70" y2="480" stroke="#BE9B28" stroke-width="3" stroke-dasharray="6 6" stroke-linecap="round"/>
+              <text x="80" y="485">Satellite/microwave backhaul</text>
+            </g>
+          </svg>
+          <figcaption class="legend">Core rings, satellite backhaul for remote villages, Arctic-ready POPs.</figcaption>
+        </figure>
+
+        <div class="stack">
+          <ul>
+            <li>Core rings engineered for deterministic performance across primary corridors.</li>
+            <li>Satellite backhaul extends access to remote villages with optimized latency.</li>
+            <li>Arctic-ready POPs with redundant power, HVAC, and remote hands.</li>
+          </ul>
+          <div class="row">
+            <a href="#" class="btn" aria-disabled="true">View interactive map</a>
+            <a href="#" class="btn" aria-disabled="true">Network SLA</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="container stack" aria-labelledby="security">
+      <h2 id="security">Security &amp; Compliance</h2>
+      <div class="security">
+        <div class="stack">
+          <p>SOC 2 Type II controls, CJIS awareness, and HIPAA handling are enforced across applicable services. DDoS scrubbing is available at network edges with coordinated response from our 24×7 operations center.</p>
+          <p class="eyebrow">GACIS compliance attestation available under NDA.</p>
+        </div>
+        <div aria-hidden="true" style="justify-self:end">
+          <svg width="120" height="140" viewBox="0 0 120 140" role="img" aria-label="Shield">
+            <defs><linearGradient id="g1"><stop offset="0" stop-color="#5FB3E3"/><stop offset="1" stop-color="#2BB673"/></linearGradient></defs>
+            <path d="M60 8 L96 28 L104 64 C104 96 84 118 60 132 C36 118 16 96 16 64 L24 28 Z" fill="url(#g1)" stroke="#0B203A" stroke-width="1.5"/>
+            <path d="M46 74 l8 8 l20 -24" fill="none" stroke="#fff" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+      </div>
+    </section>
+
+    <section class="container stack" aria-labelledby="customers">
+      <h2 id="customers">Customers</h2>
+      <div class="logos" role="list">
+        <div class="logo-tile" role="listitem" aria-label="School districts (logo)"><svg width="120" height="40" role="img"><rect width="120" height="40" rx="0" fill="#050f2f"/><text x="12" y="26" fill="#FFE28A" font-weight="700">SCHOOL DIST.</text></svg></div>
+        <div class="logo-tile" role="listitem" aria-label="City seal (logo)"><svg width="120" height="40" role="img"><rect width="120" height="40" rx="0" fill="#050f2f"/><text x="12" y="26" fill="#FFE28A" font-weight="700">CITY SEAL</text></svg></div>
+        <div class="logo-tile" role="listitem" aria-label="Healthcare system (logo)"><svg width="120" height="40" role="img"><rect width="120" height="40" rx="0" fill="#050f2f"/><text x="12" y="26" fill="#FFE28A" font-weight="700">HEALTH</text></svg></div>
+        <div class="logo-tile" role="listitem" aria-label="Airline (logo)"><svg width="120" height="40" role="img"><rect width="120" height="40" rx="0" fill="#050f2f"/><text x="12" y="26" fill="#FFE28A" font-weight="700">AIR</text></svg></div>
+        <div class="logo-tile" role="listitem" aria-label="Energy firm (logo)"><svg width="120" height="40" role="img"><rect width="120" height="40" rx="0" fill="#050f2f"/><text x="12" y="26" fill="#FFE28A" font-weight="700">ENERGY</text></svg></div>
+        <div class="logo-tile" role="listitem" aria-label="Logistics (logo)"><svg width="120" height="40" role="img"><rect width="120" height="40" rx="0" fill="#050f2f"/><text x="12" y="26" fill="#FFE28A" font-weight="700">LOGISTICS</text></svg></div>
+      </div>
+    </section>
+
+    <section class="container stack" aria-labelledby="testimonials">
+      <h2 id="testimonials">What customers say</h2>
+      <div class="grid cols-2">
+        <div class="card">
+          <blockquote>
+            <p>GACIS delivers the stability we need across long distances and hard weather. The network holds up when it matters.</p>
+            <footer>— Lena Murray, IT Director, City of Kodiak</footer>
+          </blockquote>
+        </div>
+        <div class="card">
+          <blockquote>
+            <p>Our clinics rely on predictable bandwidth and security controls. GACIS has been a consistent partner.</p>
+            <footer>— David Chen, CTO, Northern Health Cooperative</footer>
+          </blockquote>
+        </div>
+      </div>
+    </section>
+
+    <section class="container stack" aria-labelledby="press">
+      <h2 id="press">Press &amp; Updates</h2>
+      <div class="grid cols-3">
+        <article class="press-card">
+          <time datetime="2026-01-15">Jan 15, 2026</time>
+          <h3><a href="#" aria-disabled="true">Core network upgrade window continues; customer tools read-only</a></h3>
+          <p>Enhancements improve control plane efficiency and telemetry accuracy across rings.</p>
+        </article>
+        <article class="press-card">
+          <time datetime="2026-02-02">Feb 2, 2026</time>
+          <h3><a href="#" aria-disabled="true">New microwave ring increases capacity for Western Alaska</a></h3>
+          <p>Additional backhaul diversity reduces weather sensitivity and improves availability.</p>
+        </article>
+        <article class="press-card">
+          <time datetime="2026-03-04">Mar 4, 2026</time>
+          <h3><a href="#" aria-disabled="true">Expanded fiber to Southeast hub communities</a></h3>
+          <p>Scalable fiber access supports education, healthcare, and local businesses.</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="container stack" aria-labelledby="careers">
+      <h2 id="careers">Careers</h2>
+      <div class="card">
+        <p>We are hiring network engineers, field technicians, and security analysts who prefer practical outcomes to theoretical debates.</p>
+        <a href="#" class="btn" aria-disabled="true">See open roles</a>
+      </div>
+    </section>
+
+    <section class="container stack" aria-labelledby="support">
+      <h2 id="support">Support</h2>
+      <div class="support-tiles" role="list">
+        <article class="tile card" role="listitem">
+          <h3>Report an issue</h3>
+          <p>Open a ticket with service impact and details.</p>
+          <a href="#" aria-disabled="true">Open</a>
+        </article>
+        <article class="tile card" role="listitem">
+          <h3>Check outages</h3>
+          <p>View current events and maintenance windows.</p>
+          <a href="#" aria-disabled="true">View</a>
+        </article>
+        <article class="tile card" role="listitem">
+          <h3>Knowledge base</h3>
+          <p>Guides, runbooks, and configuration references.</p>
+          <a href="#" aria-disabled="true">Browse</a>
+        </article>
+      </div>
+      <p class="eyebrow">During scheduled upgrade, portal actions are read-only.</p>
+    </section>
+
+    <section class="container upgrade-banner" aria-hidden="false">
+      System upgrade underway. Client-facing tools are limited; connectivity services continue as normal.
+    </section>
+  </main>
+
+  <footer role="contentinfo">
+    <div class="container footer-grid">
+      <div>
+        <p><strong>Juneau HQ</strong> — 100 Marine Way, Juneau, AK 99801</p>
+        <p><strong>Anchorage</strong> — 500 Northern Lights Blvd, Anchorage, AK 99503</p>
+        <p><strong>Fairbanks</strong> — 300 College Rd, Fairbanks, AK 99701</p>
+        <p>General: (907) 555-0100 | NOC: (907) 555-0199 | info@gacis.example</p>
+      </div>
+      <nav aria-label="Footer links">
+        <div style="display:flex;flex-direction:column;gap:8px">
+          <a href="#" aria-disabled="true">Privacy</a>
+          <a href="#" aria-disabled="true">Acceptable Use</a>
+          <a href="#" aria-disabled="true">Carrier Services</a>
+          <a href="#" aria-disabled="true">Tariffs</a>
+          <a href="#" aria-disabled="true">Accessibility</a>
+          <a href="#" aria-disabled="true">Procurement</a>
+          <a href="#" aria-disabled="true">Media Kit</a>
+        </div>
+      </nav>
+    </div>
+    <div class="footer-note">© <span id="year">2025</span> GACIS (Global Alaska Communications &amp; Information Services)</div>
+  </footer>
+
+  <!-- Modal: auto-opens on first load when JS available; benign if JS blocked -->
+  <div id="upgradeModal" class="modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="modalTitle" aria-describedby="modalDesc">
+    <div class="modal" role="document">
+      <header>
+        <h2 id="modalTitle" style="margin:0;padding:0.2rem 0 0.3rem">System Upgrade Underway</h2>
+      </header>
+      <div class="body">
+        <p id="modalDesc">We’re enhancing client-facing systems to improve reliability and security. Some features are temporarily limited. Connectivity services continue as normal. Thank you for your patience.</p>
+      </div>
+      <div class="actions">
+        <button id="ack" type="button" class="btn btn--primary" aria-label="Acknowledge upgrade notice">Understood</button>
+      </div>
+    </div>
+  </div>
+
+
+  <script>
+    // Minimal JS: year update, modal show/close, respects reduced-motion.
+    (function(){
+      try{
+        // Copyright year update
+        var y = document.getElementById('year'); if(y) y.textContent = new Date().getFullYear();
+
+        // Prevent navigation for disabled anchors
+        var disabledAnchors = document.querySelectorAll('a[aria-disabled="true"]');
+        disabledAnchors.forEach(function(link){
+          link.addEventListener('click', function(evt){
+            evt.preventDefault();
+            evt.stopPropagation();
+          });
+        });
+
+        // Modal handling (graceful if JS disabled)
+        var modal = document.getElementById('upgradeModal');
+        var ack = document.getElementById('ack');
+        var seen = false;
+        try{ seen = sessionStorage.getItem('gacis_modal_seen') === '1'; }catch(e){ seen = false; }
+
+        function showModal(){ if(!modal) return; modal.style.display = 'flex'; if(ack && ack.focus) ack.focus({preventScroll:true}); try{ sessionStorage.setItem('gacis_modal_seen','1'); }catch(e){} }
+        function closeModal(){ if(!modal) return; modal.style.display = 'none'; }
+
+        if(!seen) setTimeout(showModal, 300);
+
+        if(ack) ack.addEventListener('click', function(){ closeModal(); }, {passive:true});
+        document.addEventListener('keydown', function(e){ if(e.key === 'Escape') closeModal(); }, {passive:true});
+      }catch(e){
+        console && console.warn && console.warn('GACIS site: non-fatal JS failure');
+      }
+    })();
+  </script>
+</body>
+</html>
