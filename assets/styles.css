@@ -649,4 +649,140 @@ body { padding-bottom: env(safe-area-inset-bottom, 0); }
 /* Ensure no accidental horizontal overflow */
 html,body{overflow-x:hidden}
 
+/* Mobile Nav: off-canvas drilldown panel (matches desktop palette) */
+.mobile-nav-toggle{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  width:40px;
+  height:40px;
+  padding:6px;
+  background:linear-gradient(135deg,var(--crimson),var(--teal));
+  color:var(--gold-hot);
+  border:1px solid rgba(0,0,0,.45);
+  border-radius:6px;
+  box-shadow:0 8px 22px rgba(0,0,0,.55);
+  cursor:pointer;
+}
+@media (min-width:901px){
+  .mobile-nav-toggle{display:none}
+}
+
+/* The panel wrapper */
+.mobile-nav-panel{
+  position:fixed;
+  inset:0;
+  z-index:120;
+  display:flex;
+  align-items:stretch;
+  justify-content:flex-end;
+}
+
+/* backdrop dim + blur */
+.mnp-backdrop{
+  position:absolute;
+  inset:0;
+  background:linear-gradient(180deg, rgba(1,6,14,.55), rgba(1,6,14,.82));
+  backdrop-filter: blur(4px);
+}
+
+/* panel sheet */
+.mnp{
+  position:relative;
+  width:min(92vw,420px);
+  max-width:420px;
+  background:linear-gradient(160deg,#020713 0%,#01030b 100%);
+  color:var(--gold-subdued);
+  padding:calc(12px + env(safe-area-inset-top,0)) 12px calc(20px + env(safe-area-inset-bottom,0));
+  box-shadow:0 30px 80px rgba(0,0,0,.75);
+  border-left:1px solid rgba(255,255,255,.02);
+  overflow:auto;
+  -webkit-overflow-scrolling:touch;
+  transform:translateX(0);
+  transition:transform .24s ease;
+}
+
+/* header inside panel */
+.mnp-header{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+  padding-bottom:12px;
+  border-bottom:1px solid rgba(255,255,255,.03);
+}
+.mnp-header h2{margin:0;color:var(--gold-hot);font-size:1.05rem}
+.mnp-actions{display:flex;gap:8px;align-items:center}
+
+/* search */
+.mnp-search{
+  background:rgba(255,255,255,.03);
+  border:1px solid rgba(255,255,255,.04);
+  color:var(--gold-hot);
+  padding:8px 10px;
+  border-radius:6px;
+  min-width:140px;
+  width:160px;
+}
+
+/* body & lists */
+.mnp-body{padding:12px 4px}
+.mnp-list{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:8px}
+.mnp-list li{margin:0}
+.mnp-item{
+  width:100%;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:12px 14px;
+  background:linear-gradient(180deg,#050f2f 0%,#010616 90%);
+  border:1px solid rgba(0,0,0,.7);
+  color:var(--gold-hot);
+  font-weight:700;
+  text-align:left;
+  cursor:pointer;
+  border-radius:6px;
+}
+.mnp-item:active{transform:scale(.997)}
+.mnp-item-title{flex:1}
+.mnp-item-chevron{color:rgba(255,255,255,.18);margin-left:12px}
+.mnp-page-link{display:block;padding:10px 12px;color:var(--gold-subdued);background:linear-gradient(180deg,#040b1f 0%,#010308 95%);border-radius:6px;border:1px solid rgba(0,0,0,.5)}
+.mnp-search-results{margin-top:8px}
+.mnp-no-results{color:var(--gold-subdued);padding:12px;text-align:center}
+
+/* reduce heavy shadows while panel open to avoid repaints */
+.mnp-open .card,
+.mnp-open .press-card,
+.mnp-open .tile,
+.mnp-open .stat,
+.mnp-open .industry{
+  box-shadow:none !important;
+  transition:none !important;
+}
+
+/* small screens tweaks */
+@media (max-width:420px){
+  .mnp{ width:100vw; max-width:100vw; border-radius:0; }
+  .mnp-search{ width: 100%; min-width:0; }
+}
+
+/* prefers reduced motion */
+@media (prefers-reduced-motion: reduce){
+  .mnp{ transition:none }
+}
+
+.mobile-nav-panel[hidden]{display:none !important}
+
+/* Ensure panel never appears on desktop even if hidden attribute is stripped */
+@media (min-width:901px){
+  .mobile-nav-panel{display:none !important}
+}
+
+/* Hide legacy in-flow navigation on mobile so only the off-canvas toggle is used */
+@media (max-width:900px){
+  .midnight-nav{display:none !important}
+}
+
+/* End mobile nav additions */
+
 /* End of file */

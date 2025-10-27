@@ -67,7 +67,6 @@
           <rect x="334" y="28" width="24" height="8" fill="#C69214"/>
         </svg>
       </div>
-      <button class="mobile-menu-toggle" aria-controls="primary-nav" aria-expanded="false" aria-label="Open primary navigation">Menu</button>
 
       <nav class="midnight-nav" aria-label="Primary navigation">
                 <ul class="nav-tiles" role="menubar">
@@ -606,6 +605,16 @@
       </nav>
 
       <div class="header-right">
+        <button class="mobile-nav-toggle" aria-controls="mobile-nav-panel" aria-expanded="false" aria-label="Open navigation" title="Open navigation" type="button" aria-haspopup="dialog">
+          <!-- hamburger icon (uses design tokens from CSS) -->
+          <svg width="20" height="14" viewBox="0 0 20 14" aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg">
+            <rect x="0" y="0" width="20" height="2" rx="1" fill="currentColor"></rect>
+            <rect x="0" y="6" width="20" height="2" rx="1" fill="currentColor"></rect>
+            <rect x="0" y="12" width="20" height="2" rx="1" fill="currentColor"></rect>
+          </svg>
+          <span class="visually-hidden">Open navigation</span>
+        </button>
+
         <button class="ai-chat" type="button" aria-disabled="true" aria-label="Open AI liaison (offline)">
           <svg width="26" height="26" viewBox="0 0 32 32" fill="none" aria-hidden="true">
             <path d="M4 7.5a3.5 3.5 0 0 1 3.5-3.5h17a3.5 3.5 0 0 1 3.5 3.5v9a3.5 3.5 0 0 1-3.5 3.5h-7.4l-4.1 4.6c-.9 1-2.5.4-2.5-.9v-3.7H7.5A3.5 3.5 0 0 1 4 16.5v-9z" fill="rgba(255,255,255,.08)" stroke="rgba(255,255,255,.35)" stroke-width="1.2"/>
@@ -617,6 +626,22 @@
       </div>
     </div>
   </header>
+
+  <aside class="mobile-nav-panel" id="mobile-nav-panel" role="dialog" aria-modal="true" aria-labelledby="mnp-title" hidden>
+    <div class="mnp-backdrop" data-mnp="backdrop" tabindex="-1" aria-hidden="true"></div>
+    <div class="mnp" role="document" aria-describedby="mnp-desc">
+      <div class="mnp-header">
+        <button class="mnp-back" type="button" aria-label="Back" hidden>&larr;</button>
+        <h2 id="mnp-title">Navigation</h2>
+        <div class="mnp-actions">
+          <input type="search" class="mnp-search" placeholder="Search navigation" aria-label="Search navigation" />
+          <button class="mnp-close" type="button" aria-label="Close navigation">&times;</button>
+        </div>
+      </div>
+      <div id="mnp-desc" class="visually-hidden">Use back to step up, close to exit. Use search to find pages across the navigation.</div>
+      <nav class="mnp-body" aria-label="Mobile navigation"></nav>
+    </div>
+  </aside>
 
   <main id="main" tabindex="-1">
     <section class="hero" aria-labelledby="hero-title">
