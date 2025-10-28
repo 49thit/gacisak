@@ -23,18 +23,18 @@
       'url("https://images.unsplash.com/photo-1469474968028-56623f02e42e?auto=format&fit=crop&w=2000&q=80")',
       'url("https://images.unsplash.com/photo-1502082553048-f009c37129b9?auto=format&fit=crop&w=2000&q=80")',
       'url("https://images.unsplash.com/photo-1476041800959-2f6bb412c8ce?auto=format&fit=crop&w=2000&q=80")',
-      'url("https://images.unsplash.com/photo-1466027131042-fb475e91e6c0?auto=format&fit=crop&w=2000&q=80")',
+      'url("https://images.unsplash.com/photo-1574788901656-6a9ee34a3fa7?auto=format&fit=crop&w=2000&q=80")',
       'url("https://images.unsplash.com/photo-1482192505345-5655af888cc4?auto=format&fit=crop&w=2000&q=80")',
       'url("https://images.unsplash.com/photo-1477519242566-6ae87c31d212?auto=format&fit=crop&w=2000&q=80")',
       'url("https://images.unsplash.com/photo-1456926631375-92c8ce872def?auto=format&fit=crop&w=2000&q=80")',
       'url("https://images.unsplash.com/photo-1445308394109-4ec2920981b1?auto=format&fit=crop&w=2000&q=80")',
       'url("https://images.unsplash.com/photo-1478479474071-8a3014d422c8?auto=format&fit=crop&w=2000&q=80")',
       'url("https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?auto=format&fit=crop&w=2000&q=80")',
-      'url("https://images.unsplash.com/photo-1509827720381-5afcfea4d38e?auto=format&fit=crop&w=2000&q=80")',
-      'url("https://images.unsplash.com/photo-1469474941776-292192aad1ce?auto=format&fit=crop&w=2000&q=80")',
-      'url("https://images.unsplash.com/photo-1526481280695-3c469805ac05?auto=format&fit=crop&w=2000&q=80")',
+      'url("https://images.unsplash.com/photo-1574866412308-32d9023633dd?auto=format&fit=crop&w=2000&q=80")',
+      'url("https://images.unsplash.com/photo-1633967920376-33b2d94f091f?auto=format&fit=crop&w=2000&q=80")',
+      'url("https://images.unsplash.com/photo-1531884422565-1b4a26326a31?auto=format&fit=crop&w=2000&q=80")',
       'url("https://images.unsplash.com/photo-1470246973918-29a93221c455?auto=format&fit=crop&w=2000&q=80")',
-      'url("https://images.unsplash.com/photo-1500534310661-30e8d02a4fd5?auto=format&fit=crop&w=2000&q=80")'
+      'url("https://images.unsplash.com/photo-1686065428339-c88c628c6562?auto=format&fit=crop&w=2000&q=80")'
     ];
     try {
       var heroSection = qs('.hero');
