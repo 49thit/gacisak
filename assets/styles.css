@@ -246,7 +246,7 @@ header.site-header{
   z-index:-1;
 }
 .mega-page:hover{
-  color:#fcecc5;
+  color:#ffffff;
   text-decoration:none;
 }
 .mega-page:hover::after{
