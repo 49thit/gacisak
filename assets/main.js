@@ -74,6 +74,62 @@
       });
     } catch(e){}
 
+    // --- Industries slider content sourced from JSON for easier editing ---
+    (function initIndustriesSlider() {
+      var industriesEl = qs('.industries[data-feed]');
+      if (!industriesEl) return;
+      var feedUrl = industriesEl.getAttribute('data-feed');
+      if (!feedUrl || typeof fetch !== 'function') return;
+
+      function createIndustryCard(entry) {
+        var article = document.createElement('article');
+        article.className = 'industry';
+        article.setAttribute('role', 'listitem');
+        if (entry && entry.ariaLabel) article.setAttribute('aria-label', entry.ariaLabel);
+
+        var img = document.createElement('img');
+        img.setAttribute('loading', 'lazy');
+        img.setAttribute('decoding', 'async');
+        img.setAttribute('width', '1200');
+        img.setAttribute('height', '720');
+        if (entry && entry.image && entry.image.src) img.src = entry.image.src;
+        if (entry && entry.image && entry.image.alt) img.alt = entry.image.alt;
+
+        var overlay = document.createElement('div');
+        overlay.className = 'overlay';
+        overlay.setAttribute('aria-hidden', 'true');
+
+        var content = document.createElement('div');
+        content.className = 'content';
+        var h3 = document.createElement('h3');
+        h3.textContent = (entry && entry.title) || '';
+        var p = document.createElement('p');
+        p.textContent = (entry && entry.description) || '';
+        content.appendChild(h3);
+        content.appendChild(p);
+
+        article.appendChild(img);
+        article.appendChild(overlay);
+        article.appendChild(content);
+        return article;
+      }
+
+      fetch(feedUrl)
+        .then(function (resp) { return resp.json(); })
+        .then(function (data) {
+          if (!data) return;
+          var entries = Array.isArray(data) ? data : data.industries;
+          if (!Array.isArray(entries) || !entries.length) return;
+          industriesEl.innerHTML = '';
+          entries.forEach(function (entry) {
+            industriesEl.appendChild(createIndustryCard(entry));
+          });
+        })
+        .catch(function (err) {
+          try { console.warn && console.warn('Industries feed failed', err); } catch (e) {}
+        });
+    })();
+
     // --- Mobile nav elements & state ---
     var mToggle = qs('.mobile-nav-toggle');                       // the hamburger toggle in header
     var mPanel = qs('#mobile-nav-panel');                        // aside container

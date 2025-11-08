@@ -1,0 +1,76 @@
+{
+  "industries": [
+    {
+      "ariaLabel": "Healthcare & Telemedicine",
+      "title": "Healthcare & Telemedicine",
+      "description": "HIPAA-aligned transport and reliable clinical connectivity.",
+      "image": {
+        "src": "https://images.unsplash.com/photo-1673334562264-0f01661aa25f?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8YWxhc2thJTIwY2xpbmljfGVufDB8fDB8fHww&auto=format&fit=crop&w=1200&q=80",
+        "alt": "Community health nurse supporting a telehealth consult in rural Alaska"
+      }
+    },
+    {
+      "ariaLabel": "Influencers",
+      "title": "Influencers",
+      "description": "Creator-grade uplinks, mobile encoders, and remote studio support.",
+      "image": {
+        "src": "https://images.unsplash.com/photo-1608649356315-f972d53ad523?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8YWxhc2thJTIwdmxvZ2dlcnxlbnwwfHwwfHx8MA%3D%3D&auto=format&fit=crop&w=1200&q=80",
+        "alt": "Influencer livestreaming with camera gear against an Alaska mountain backdrop"
+      }
+    },
+    {
+      "ariaLabel": "Partisan Think Tanks",
+      "title": "Partisan Think Tanks",
+      "description": "Secure collaboration suites and policy research with and without audit trails.",
+      "image": {
+        "src": "https://images.unsplash.com/photo-1668706971199-37e30a4e6298?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8YWxhc2thJTIwcG9saXRpY3N8ZW58MHx8MHx8fDA%3D&auto=format&fit=crop&w=1200&q=80",
+        "alt": "Policy researchers reviewing notes under the Alaska capitol dome"
+      }
+    },
+    {
+      "ariaLabel": "School Districts & E-Rate",
+      "title": "Schools and Teachers",
+      "description": "Managed IT, network and curricular safety, specialized education services.",
+      "image": {
+        "src": "https://images.unsplash.com/photo-1577125527890-475beedd75d3?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8YWxhc2thJTIwc2Nob29sfGVufDB8fDB8fHww&auto=format&fit=crop&w=1200&q=80",
+        "alt": "Students collaborating inside a rural Alaska classroom"
+      }
+    },
+    {
+      "ariaLabel": "Special Interest",
+      "title": "Special Interest",
+      "description": "Advocacy-ready messaging channels and omnichannel escalation paths.",
+      "image": {
+        "src": "https://images.unsplash.com/photo-1708732664307-39ef2177041a?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8YWxhc2thJTIwYWN0aXZpc218ZW58MHx8MHx8fDA%3D&auto=format&fit=crop&w=1200&q=80",
+        "alt": "Advocates rallying with signage during a chilly Anchorage morning"
+      }
+    },
+    {
+      "ariaLabel": "State & Local Government",
+      "title": "State & Local Government",
+      "description": "CJIS-aware interagency connectivity and redundancy planning.",
+      "image": {
+        "src": "https://images.unsplash.com/photo-1654835608149-7605e13b3f66?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8anVuZWF1JTIwYWxhc2thfGVufDB8fDB8fHww&auto=format&fit=crop&w=1200&q=80",
+        "alt": "Juneau's waterfront civic buildings beneath coastal mountains"
+      }
+    },
+    {
+      "ariaLabel": "Stay at Home Moms",
+      "title": "Stay at Home Moms",
+      "description": "Whole-home Wi-Fi, safety monitoring, and concierge support for multi-tasking households.",
+      "image": {
+        "src": "https://images.unsplash.com/photo-1657984872360-d078953c498c?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8YWxhc2thJTIwaG9tZXxlbnwwfHwwfHx8MA%3D%3D&auto=format&fit=crop&w=1200&q=80",
+        "alt": "Mom and child looking over snowy mountains from their Anchorage living room"
+      }
+    },
+    {
+      "ariaLabel": "Tribal Government",
+      "title": "Tribal Government",
+      "description": "Resilient connectivity for councils, village police, and community programs.",
+      "image": {
+        "src": "https://images.unsplash.com/photo-1722548352619-d921b5f35872?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8YWxhc2thJTIwdHJpYmFsfGVufDB8fDB8fHww&auto=format&fit=crop&w=1200&q=80",
+        "alt": "Tribal community center with cedar architecture and Alaska Native artwork"
+      }
+    }
+  ]
+}
